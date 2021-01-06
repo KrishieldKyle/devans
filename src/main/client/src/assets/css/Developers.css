@@ -1,0 +1,13 @@
+#developers-container{
+    display: flex;
+    flex-direction: column;
+    width: 99%;
+    margin: 1%;
+}
+
+
+#developers-container #developer-cards{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}

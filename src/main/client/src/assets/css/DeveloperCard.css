@@ -1,0 +1,44 @@
+.developer-card-container{
+    display: flex;
+    flex-direction: row;
+    padding: 1%;
+    border: 1px solid rgba(0, 0, 0, 0.329);
+    width: 95%;
+    font-size: 24px;
+    /* height: 110px; */
+    overflow: hidden;
+    margin: 1%;
+}
+
+.developer-card-container .developer-card-image{
+    display: flex;
+    width: 100px;
+    align-items: center;
+    justify-content: center;
+}
+
+.developer-card-container .developer-card-info {
+   flex: 1;
+}
+
+.developer-card-container .developer-card-info .developer-card-fullname{
+    margin: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid black;
+}
+
+.developer-card-container .developer-card-info .developer-card-titles{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    flex-wrap: wrap;
+    padding: 0 5% 0;
+}
+
+.developer-card-container .developer-card-info .developer-card-titles .no-titles{
+    margin: 0;
+    font-size: 0.6em;
+    width: 100%;
+    color: initial;
+}
+

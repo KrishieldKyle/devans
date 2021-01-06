@@ -1,0 +1,91 @@
+#textfield-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 15px;
+}
+
+#textfield-container .error-div {
+    display: flex;
+    width: 60%;
+    height: .5em;
+}
+
+#textfield-container .error-div .error-span {
+    font-size: .6em;
+    color: red;
+}
+
+#textfield-container label {
+    margin: 10px 0 0;
+    width: 70%;
+    position: relative;
+    display: inline-block;
+}
+
+#textfield-container label span {
+    font-size: 0.7em;
+    padding: 10px;
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: 0.2s;
+    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    opacity: 0.5;
+    color: initial;
+}
+
+#textfield-container input {
+    width: 90%;
+    height: 1rem;
+    font-size: .5rem;
+    font-weight: 500;
+    padding: 5px 10px 5px;
+    border-radius: 5px;
+    border: 2px solid rgb(34, 126, 187);
+    outline: none;
+}
+
+#textfield-container input.invalid-input {
+    border: 2px solid red;
+}
+
+#textfield-container input:focus+span,
+#textfield-container input:not(:placeholder-shown)+span {
+    opacity: 1;
+    transform: scale(0.75) translateY(-106%) translateX(2px);
+    border: 2px solid rgb(34, 126, 187);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: none;
+    padding: 2px 10px 2px;
+    background: white;
+}
+
+#textfield-container input:focus+span.invalid-input,
+#textfield-container input:not(:placeholder-shown)+span.invalid-input {
+    border: 2px solid red;
+    border-bottom: none;
+}
+
+/* For IE Browsers*/
+#textfield-container input:focus+span,
+#textfield-container input:not(:-ms-input-placeholder)+span {
+    opacity: 1;
+    transform: scale(0.75) translateY(-106%) translateX(2px);
+    border: 2px solid rgb(34, 126, 187);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: none;
+    padding: 2px 10px 2px;
+    background: white;
+}
+
+#textfield-container input:focus+span.invalid-input,
+#textfield-container input:not(:-ms-input-placeholder)+span.invalid-input {
+    border: 2px solid red;
+    border-bottom: none;
+}

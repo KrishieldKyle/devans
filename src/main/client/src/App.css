@@ -1,0 +1,43 @@
+body,
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    background: #e8f7f0;
+    box-sizing: border-box;
+    z-index: -2;
+    color: rgb(34, 126, 187);
+}
+
+#app {
+    height: 100%;
+    width: 100%;
+}
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 6.2vh);
+    width: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+.spacer {
+    flex: 1;
+}
+
+.line-div-left {
+    border: 1px solid rgb(40, 40, 41);
+    margin: 5px 5px 5px -5px;
+}
+
+.line-div-right {
+    border: 1px solid rgb(40, 40, 41);
+    margin: 5px -15px 5px 5px;
+}

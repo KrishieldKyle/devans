@@ -1,0 +1,51 @@
+.auth-main-div{
+    padding-top: 10vh;
+}
+
+.auth-main-div p{
+    font-size: 1.5em;
+    text-align: center;
+    font-weight: 600;
+}
+
+.auth-main-div .auth-fields{
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-main-div .auth-fields form{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.auth-main-div .auth-fields form .loadingDiv,
+.auth-main-div .auth-fields form .buttonDiv{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-main-div .auth-fields form .buttonDiv span{
+    font-size: 0.6em;
+    color: initial;
+}
+
+.auth-main-div .auth-fields form .buttonDiv span a{
+    text-decoration: none;
+    color: rgb(34, 126, 187);
+}
+
+.auth-main-div .auth-fields form input[type=submit]{
+    padding: 5px 15px 5px;
+    margin: 10px;
+    font-size: .5em;
+    font-weight: 1000;
+    border-radius: 5px;
+    border: 1px solid rgb(34, 126, 187);
+    background: rgb(241, 241, 243);
+    cursor: pointer;
+    /* color: rgb(60, 187, 34); */
+}
