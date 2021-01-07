@@ -7,6 +7,7 @@ import PrivateRoute from './components/common/PrivateRoute';
 
 // Components
 import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
 import Developers from "./components/developers/Developers";
 
 // Import Css
@@ -26,6 +27,7 @@ class App extends Component {
             <Navbar />
             <div id="main-container">
               <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
               <Route exact path="/developers" component={Developers} />
             </div>
           </div>

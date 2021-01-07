@@ -1,4 +1,4 @@
-import { GET_ERRORS, SET_CURRENT_USER, AUTH_LOADING } from './types'
+import { GET_ERRORS, SET_CURRENT_USER, AUTH_LOADING, CLEAR_ERRORS, SET_MESSAGE } from './types'
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
@@ -7,18 +7,20 @@ import jwt_decode from 'jwt-decode';
 export const registerUser = (userData, history) => dispatch => {
     dispatch(setAuthLoading(true));
     axios.post('/api/user/register', userData)
-        .then(() => {
+        .then(res => {
             dispatch(setAuthLoading(false));
-            history.push('/login')
+            // history.push('/login');
+            dispatch(setMessage({message: res.data.message, isSuccess: res.data.success}));
+            dispatch(clearErrors())
         })
         .catch(err => {
             dispatch(setAuthLoading(false));
-                dispatch({
-                    type: GET_ERRORS,
-                    payload: err.response.data
-                })
-            }
-        )
+            dispatch(setMessage({message: err.response.data.message, isSuccess: err.response.data.success}));
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        })
 }
 
 // Login - Get User Token
@@ -37,9 +39,12 @@ export const loginUser = (userData) => dispatch => {
             // Set current user
             dispatch(setCurrentUser(decoded));
             dispatch(setAuthLoading(false));
+            dispatch(setMessage({message: res.data.message, isSuccess: res.data.success}));
+            dispatch(clearErrors())
         })
         .catch(err => {
             dispatch(setAuthLoading(false));
+            dispatch(setMessage({message: err.response.data.message, isSuccess: err.response.data.success}));
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
@@ -54,11 +59,26 @@ export const setCurrentUser = (decoded) => {
     }
 }
 
+// set Logged in user
+export const setMessage = (message) => {
+    return {
+        type: SET_MESSAGE,
+        payload: message
+    }
+}
+
 // set auth loading
 export const setAuthLoading = (isLoading) => {
     return {
         type: AUTH_LOADING,
         payload: isLoading
+    }
+}
+
+// clear errors
+export const clearErrors = () => {
+    return {
+        type: CLEAR_ERRORS
     }
 }
 

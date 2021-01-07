@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import "../../assets/css/common/Message.css";
 import { connect } from 'react-redux';
 
-import { clearErrors } from "../../actions/errorActions";
+import { clearMessage } from "../../actions/messageActions";
 
 export class Message extends Component {
 
     constructor() {
         super()
         this.state = {
-            errors: {},
+            message: {},
+            isSuccessCopy: false,
+            isSuccessCopy2: false,
             messageCopy: "",
             messageCopy2: ""
         }
@@ -19,34 +21,38 @@ export class Message extends Component {
     }
 
     closeMessage(){
-        this.setState({messageCopy2: this.props.errors.message}, () => {
-            this.props.clearErrors();
+        this.setState(
+            {
+                messageCopy2: this.props.message.message,
+                isSuccessCopy2: this.props.message.isSuccess
+            }, () => {
+            this.props.clearMessage();
         })
     }
 
-    // static getDerivedStateFromProps(nextProps, prevState){
-    //     if (nextProps.errors !== prevState.errors) {
-    //         console.log("getDerivedStateFromProps")
-    //         return { errors: nextProps.errors, messageCopy: nextProps.errors.message};
-    //     }
-    //     else return null;
-    // }
-
     componentDidUpdate(prevProps){
+        console.log("prevProps.message",prevProps.message);
+        console.log("this.props.message",this.props.message);
 
-        if(prevProps.errors !== this.props.errors){
-            this.setState({errors : this.props.errors, messageCopy: this.props.errors.message || this.state.messageCopy2})
+        if(prevProps.message !== this.props.message){
+            console.log("NOT_EQUAL");
+            this.setState(
+                {
+                    message : this.props.message, 
+                    messageCopy: this.props.message.message || this.state.messageCopy2,
+                    isSuccessCopy : this.props.message.isSuccess || this.state.isSuccessCopy2
+                })
         }
     }
     
     render() {
 
-        const {success, message } = this.state.errors;
-        const { messageCopy } = this.state;
+        const {message } = this.state.message;
+        const { messageCopy, isSuccessCopy2 } = this.state;
 
         return (
             <div id="message-container" className={message ? "show-message" : "hide-message"}>
-                <div id="message" className={success ? "success" : "failed"}>
+                <div id="message" className={isSuccessCopy2 ? "success" : "failed"}>
                     <p>{messageCopy}</p>
                         <i className="fa fa-close" onClick={this.closeMessage}></i>
                 </div>
@@ -56,12 +62,12 @@ export class Message extends Component {
 }
 
 Message.propTypes = {
-    errors: PropTypes.object.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    message: PropTypes.object.isRequired,
+    clearMessage: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    errors: state.errors
+    message: state.message
 })
 
-export default connect(mapStateToProps, {clearErrors})(Message);
+export default connect(mapStateToProps, {clearMessage})(Message);

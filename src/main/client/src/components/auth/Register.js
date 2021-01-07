@@ -2,22 +2,25 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loginUser } from '../../actions/authActions';
+import { registerUser } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 
 // Import Commons
 import TextField from "../common/TextField";
+import Spinner from "../common/Spinner";
 
 // Import Css
 import "../../assets/css/Auth.css"
 
-export class Login extends Component {
+export class Register extends Component {
 
     constructor() {
         super()
         this.state = {
             username: '',
             password: '',
+            confirmPassword: '',
+            auth: {},
             errors: {}
         }
 
@@ -26,12 +29,13 @@ export class Login extends Component {
     }
 
     componentDidUpdate(prevProps){
-
-        if(this.props.auth.isAuthenticated){
-            this.props.history.push('/dashboard')
-        }
+      
         if(prevProps.errors !== this.props.errors){
             this.setState({errors : this.props.errors})
+        }
+
+        if(prevProps.auth !== this.props.auth){
+            this.setState({auth : this.props.auth})
         }
     }
 
@@ -48,17 +52,34 @@ export class Login extends Component {
 
         const userData = {
             username: this.state.username,
-            password: this.state.password
+            password: this.state.password,
+            confirmPassword: this.state.confirmPassword
         }
-        this.props.loginUser(userData);
+        this.props.registerUser(userData);
     }
 
     render() {
         const { errors } = this.state;
+        const { isLoading } = this.state.auth;
+
+        let button;
+
+        if(isLoading){
+            button = <Spinner width={40} />
+        }
+        else {
+            button = (
+                <div className="buttonDiv">
+                            <input type="submit" value="Register" />
+                            <span>Already have an account? <Link to="/login">Login</Link></span>
+                        </div>
+            )
+        }
+
 
         return (
             <div className="auth-main-div">
-                <p>Login to Devans</p>
+                <p>Register to Devans</p>
                 <div className="auth-fields">
                     <form onSubmit={this.onSubmit}>
                         <TextField 
@@ -66,7 +87,7 @@ export class Login extends Component {
                             type="text"
                             name="username"
                             value={this.state.username}
-                            error={errors.username}
+                            error={errors.message ? " " : errors.username}
                             onChange={this.onChange}
                         />
                         <TextField 
@@ -77,10 +98,15 @@ export class Login extends Component {
                             error={errors.password}
                             onChange={this.onChange}
                         />
-                        <div className="buttonDiv">
-                            <input type="submit" value="Login" />
-                            <span>Don't have an account? <Link to="/register">Register</Link></span>
-                        </div>
+                        <TextField 
+                            placeholder="Confirm Password"
+                            type="password"
+                            name="confirmPassword"
+                            value={this.state.confirmPassword}
+                            error={errors.confirmPassword}
+                            onChange={this.onChange}
+                        />
+                        {button}
                         
                     </form>
                 </div>
@@ -89,10 +115,9 @@ export class Login extends Component {
     }
 }
 
-Login.propTypes = {
-    loginUser: PropTypes.func.isRequired,
+Register.propTypes = {
+    registerUser: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
 }
 
@@ -101,4 +126,4 @@ const mapStateToProps = (state) => ({
     errors: state.errors
 })
 
-export default connect(mapStateToProps, { loginUser, clearErrors })(Login);
+export default connect(mapStateToProps, { registerUser, clearErrors })(Register);
