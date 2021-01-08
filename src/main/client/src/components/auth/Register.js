@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
+import { closeMessage } from '../../actions/messageActions';
 
 // Import Commons
 import TextField from "../common/TextField";
@@ -55,6 +56,7 @@ export class Register extends Component {
             password: this.state.password,
             confirmPassword: this.state.confirmPassword
         }
+        this.props.closeMessage();
         this.props.registerUser(userData);
     }
 
@@ -117,6 +119,7 @@ export class Register extends Component {
 
 Register.propTypes = {
     registerUser: PropTypes.func.isRequired,
+    closeMessage: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired,
     errors: PropTypes.object.isRequired
 }
@@ -126,4 +129,4 @@ const mapStateToProps = (state) => ({
     errors: state.errors
 })
 
-export default connect(mapStateToProps, { registerUser, clearErrors })(Register);
+export default connect(mapStateToProps, { registerUser, clearErrors, closeMessage })(Register);

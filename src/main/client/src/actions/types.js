@@ -4,7 +4,7 @@ export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 // Message Reducer
 export const SET_MESSAGE = 'SET_MESSAGE';
-export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
+export const CLOSE_MESSAGE = 'CLOSE_MESSAGE';
 
 // Auth Reducer
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';

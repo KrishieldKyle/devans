@@ -1,9 +1,10 @@
-import { CLEAR_MESSAGE, SET_MESSAGE } from '../actions/types';
+import { CLEAR_MESSAGE, SET_MESSAGE, CLOSE_MESSAGE } from '../actions/types';
 
 const getDefaultState = () => {
     return {
         message: "",
-        isSuccess: true
+        isSuccess: true,
+        isMessageShowing: false
     }
   };
 
@@ -14,7 +15,7 @@ export default function (state = initialState, action) {
     switch (action.type) {
         case SET_MESSAGE:
             return action.payload
-        case CLEAR_MESSAGE:
+        case CLOSE_MESSAGE:
             return getDefaultState();
         default:
             return state;

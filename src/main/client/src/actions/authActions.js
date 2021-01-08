@@ -10,12 +10,12 @@ export const registerUser = (userData, history) => dispatch => {
         .then(res => {
             dispatch(setAuthLoading(false));
             // history.push('/login');
-            dispatch(setMessage({message: res.data.message, isSuccess: res.data.success}));
+            dispatch(setMessage({message: res.data.message, isSuccess: res.data.success, isMessageShowing: true}));
             dispatch(clearErrors())
         })
         .catch(err => {
             dispatch(setAuthLoading(false));
-            dispatch(setMessage({message: err.response.data.message, isSuccess: err.response.data.success}));
+            dispatch(setMessage({message: err.response.data.message, isSuccess: err.response.data.success, isMessageShowing: true}));
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
@@ -39,12 +39,12 @@ export const loginUser = (userData) => dispatch => {
             // Set current user
             dispatch(setCurrentUser(decoded));
             dispatch(setAuthLoading(false));
-            dispatch(setMessage({message: res.data.message, isSuccess: res.data.success}));
+            dispatch(setMessage({message: res.data.message, isSuccess: res.data.success, isMessageShowing: true}));
             dispatch(clearErrors())
         })
         .catch(err => {
             dispatch(setAuthLoading(false));
-            dispatch(setMessage({message: err.response.data.message, isSuccess: err.response.data.success}));
+            dispatch(setMessage({message: err.response.data.message, isSuccess: err.response.data.success, isMessageShowing: true}));
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data

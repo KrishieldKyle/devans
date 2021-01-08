@@ -6,6 +6,7 @@ import { loginUser } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 
 // Import Commons
+import Spinner from "../common/Spinner";
 import TextField from "../common/TextField";
 
 // Import Css
@@ -18,7 +19,8 @@ export class Login extends Component {
         this.state = {
             username: '',
             password: '',
-            errors: {}
+            errors: {},
+            auth: {}
         }
 
         this.onChange = this.onChange.bind(this);
@@ -31,7 +33,14 @@ export class Login extends Component {
             this.props.history.push('/dashboard')
         }
         if(prevProps.errors !== this.props.errors){
-            this.setState({errors : this.props.errors})
+            this.setState({
+                    errors : this.props.errors
+                })
+        }
+        if(prevProps.auth !== this.props.auth){
+            this.setState({
+                    auth : this.props.auth
+                })
         }
     }
 
@@ -55,6 +64,21 @@ export class Login extends Component {
 
     render() {
         const { errors } = this.state;
+        const { isLoading } = this.state.auth;
+
+        let button;
+
+        if(isLoading){
+            button = <Spinner width={40} />
+        }
+        else {
+            button = (
+                <div className="buttonDiv">
+                            <input type="submit" value="Login" />
+                            <span>Don't have an account? <Link to="/register">Register</Link></span>
+                        </div>
+            )
+        }
 
         return (
             <div className="auth-main-div">
@@ -77,10 +101,7 @@ export class Login extends Component {
                             error={errors.password}
                             onChange={this.onChange}
                         />
-                        <div className="buttonDiv">
-                            <input type="submit" value="Login" />
-                            <span>Don't have an account? <Link to="/register">Register</Link></span>
-                        </div>
+                        {button}
                         
                     </form>
                 </div>
