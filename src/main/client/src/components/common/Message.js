@@ -11,7 +11,7 @@ export class Message extends Component {
         super()
         this.state = {
             message: {},
-            messageTimer: clearTimeout(),
+            messageTimer: null,
             isSuccessCopy: false,
             messageCopy: ""
         }
