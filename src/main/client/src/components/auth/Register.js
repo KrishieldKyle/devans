@@ -11,7 +11,7 @@ import TextField from "../common/TextField";
 import Spinner from "../common/Spinner";
 
 // Import Css
-import "../../assets/css/Auth.css"
+import "./Auth.css"
 
 export class Register extends Component {
 

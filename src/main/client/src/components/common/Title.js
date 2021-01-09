@@ -1,5 +1,5 @@
 
-import "../../assets/css/common/Title.css";
+import "./Title.css";
 
 const Title = ({title}) => {
     return (

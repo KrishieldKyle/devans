@@ -9,7 +9,7 @@ import Title from "../common/Title";
 import Spinner from "../common/Spinner"
 
 // Import css
-import "../../assets/css/DeveloperCard.css";
+import "./DeveloperCard.css";
 
 export class DeveloperCard extends Component {
 

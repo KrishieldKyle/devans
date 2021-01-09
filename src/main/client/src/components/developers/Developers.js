@@ -8,7 +8,7 @@ import DeveloperCard from "./DeveloperCard";
 import Spinner from "../common/Spinner"
 
 // import css
-import "../../assets/css/Developers.css";
+import "./Developers.css";
 
 export class Developers extends Component {
 

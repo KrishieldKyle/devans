@@ -1,8 +1,8 @@
 #developers-container{
     display: flex;
     flex-direction: column;
-    width: 99%;
-    margin: 1%;
+    width: 98%;
+    padding: 1%;
 }
 
 

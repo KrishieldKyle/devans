@@ -10,7 +10,7 @@ import Spinner from "../common/Spinner";
 import TextField from "../common/TextField";
 
 // Import Css
-import "../../assets/css/Auth.css"
+import "./Auth.css"
 
 export class Login extends Component {
 

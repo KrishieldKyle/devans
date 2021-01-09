@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import "../../assets/css/common/Message.css";
+import "./Message.css";
 import { connect } from 'react-redux';
 
 import { closeMessage } from "../../actions/messageActions";

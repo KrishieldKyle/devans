@@ -1,4 +1,4 @@
-import { CLEAR_MESSAGE, SET_MESSAGE, CLOSE_MESSAGE } from '../actions/types';
+import { SET_MESSAGE, CLOSE_MESSAGE } from '../actions/types';
 
 const getDefaultState = () => {
     return {

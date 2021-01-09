@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import "../../assets/css/common/TextField.css";
+import "./TextField.css";
 
 
 const TextField = ({placeholder, type, name, value, onChange, error, disabled}) => {

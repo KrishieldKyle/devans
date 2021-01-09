@@ -4,12 +4,14 @@ import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
 import { Provider } from 'react-redux';
+import moment from "moment-timezone";
 
 import store from './store';
 import PrivateRoute from './components/common/PrivateRoute';
 
 // Components
 import Login from "./components/auth/Login";
+import Home from "./components/home/Home";
 import Register from "./components/auth/Register";
 import Developers from "./components/developers/Developers";
 
@@ -50,6 +52,7 @@ class App extends Component {
           <div id="app">
             <Navbar />
             <div id="main-container">
+              <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/developers" component={Developers} />
