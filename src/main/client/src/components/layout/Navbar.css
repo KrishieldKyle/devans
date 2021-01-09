@@ -116,6 +116,8 @@
 
 #collapsible-navbar-mobile ul li a{
     color: rgb(40, 40, 41);
+    display: block;
+    width: 100%;
 }
 
 #collapsible-navbar-mobile ul li:hover{
