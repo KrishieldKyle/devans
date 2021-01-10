@@ -14,6 +14,7 @@ import Login from "./components/auth/Login";
 import Home from "./components/home/Home";
 import Register from "./components/auth/Register";
 import Developers from "./components/developers/Developers";
+import Account from "./components/account/Account";
 
 // Import Css
 import './App.css';
@@ -27,7 +28,7 @@ if (localStorage.jwtToken) {
   // Decode token and get user info and exp
   const decoded = jwt_decode(localStorage.jwtToken);
   // Set user and isAuthenticated
-  store.dispatch(setCurrentUser(decoded));
+  store.dispatch(setCurrentUser(decoded.user));
 
   // Check for expired token
   const currentTime = Date.now() / 1000;
@@ -55,6 +56,7 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
+              <Route exact path="/account" component={Account} />
               <Route exact path="/developers" component={Developers} />
             </div>
           </div>

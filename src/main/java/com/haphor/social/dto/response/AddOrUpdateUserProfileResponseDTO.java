@@ -22,7 +22,7 @@ public class AddOrUpdateUserProfileResponseDTO implements Serializable {/**
 	private boolean isSuccess;
 	private String message;
 	private HttpStatus httpStatus;
-	private UserProfileDTO userProfileDTO;
+	private UserProfileDTO profile;
 	
 
 }

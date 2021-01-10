@@ -1,0 +1,13 @@
+.technology-container {
+    border: 1px solid rgb(204, 144, 65);
+    overflow: auto;
+    margin: 2px;
+    padding: 5px 10px 5px;
+    border-radius: 5px;
+}
+
+.technology-container p{
+    margin: 0;
+    font-size: .6em;
+    
+}

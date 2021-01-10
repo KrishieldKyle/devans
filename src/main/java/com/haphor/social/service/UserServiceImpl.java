@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService{
 			
 			UserProfile userProfile = user.getUserProfile();
 			
-			UserProfileDTO userProfileDTO = new UserProfileDTO();
+			UserProfileDTO userProfileDTO = null;
 			
 			if(userProfile != null) {
 				userProfileDTO = convertEntity.toUserProfileDTO(userProfile);
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService{
 			
 			UserDTO userDto = convertEntity.toUserDTO(user, titleDtos, technologyDtos, userProfileDTO);
 			
-			return new UserResponseDTO(true, "Successfully fetched to user", HttpStatus.OK, userDto);
+			return new UserResponseDTO(true, "Successfully fetched the user", HttpStatus.OK, userDto);
 		}
 		
 		
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService{
 		
 		UserProfile userProfile = null;
 		
-		UserProfileDTO userProfileDTO = new UserProfileDTO();
+		UserProfileDTO userProfileDTO = null;
 		
 		for(User user : users) {
 			

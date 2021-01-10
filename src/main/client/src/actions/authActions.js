@@ -37,7 +37,7 @@ export const loginUser = (userData) => dispatch => {
             // Decode token to get user data
             const decoded = jwt_decode(jwt);
             // Set current user
-            dispatch(setCurrentUser(decoded));
+            dispatch(setCurrentUser(decoded.user));
             dispatch(setAuthLoading(false));
             dispatch(setMessage({message: res.data.message, isSuccess: res.data.success, isMessageShowing: true}));
             dispatch(clearErrors())

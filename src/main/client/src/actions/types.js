@@ -13,3 +13,7 @@ export const AUTH_LOADING = 'AUTH_LOADING';
 // Developers Reducer
 export const GET_DEVELOPERS = 'GET_DEVELOPERS';
 export const DEVELOPERS_LOADING = 'DEVELOPERS_LOADING';
+
+// User Reducer
+export const GET_USER = 'GET_USER';
+export const SET_USER_PROFILE = 'SET_USER_PROFILE';
