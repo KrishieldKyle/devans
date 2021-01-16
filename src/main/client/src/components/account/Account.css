@@ -42,6 +42,23 @@
     background: rgba(34, 126, 187, 0.589);
 }
 
+#account-container i {
+    display: inline;
+    margin: 0;
+    position: absolute;
+    font-size: .6em;
+    top: -26px;
+    right: 5px;
+    padding: 5px 15px 5px;
+    border: 1px solid rgb(40, 40, 41);
+    color: rgb(40, 40, 41);
+    border-bottom: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    cursor: pointer;
+    background: rgba(34, 126, 187, 0.589);
+}
+
 #account-container span {
     font-size: 0.8em;
 }
@@ -59,19 +76,14 @@
     align-items: center;
 }
 
-#account-container #account-profile-container #account-profile #profile-label{
-    font-weight: 600;
-    margin-right: 5px;
-}
-
-#account-container #account-profile-container #account-profile .account-profile-information{
+#account-container #account-profile-container #account-profile #account-profile-information{
     display: flex;
     flex-direction: column;
 }
 
-#account-container #account-profile-container #account-profile .account-profile-information p{
+#account-container #account-profile-container #account-profile #account-profile-information p{
     margin: 2px;
-    font-size: 0.8em;
+    font-size: 0.6em;
 }
 
 #account-container #account-titles-container, 

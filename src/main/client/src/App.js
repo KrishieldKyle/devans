@@ -15,6 +15,7 @@ import Home from "./components/home/Home";
 import Register from "./components/auth/Register";
 import Developers from "./components/developers/Developers";
 import Account from "./components/account/Account";
+import EditProfile from "./components/account/EditProfile";
 
 // Import Css
 import './App.css';
@@ -24,12 +25,13 @@ import Navbar from './components/layout/Navbar';
 // Check for token
 if (localStorage.jwtToken) {
   // Set auth token header auth
-  setAuthToken(localStorage.jwtToken);
+  setAuthToken("Bearer "+localStorage.jwtToken);
   // Decode token and get user info and exp
   const decoded = jwt_decode(localStorage.jwtToken);
   // Set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded.user));
 
+  console.log(676734)
   // Check for expired token
   const currentTime = Date.now() / 1000;
   if (decoded.exp < currentTime) {
@@ -57,6 +59,7 @@ class App extends Component {
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/account" component={Account} />
+              <Route exact path="/edit-profile" component={EditProfile} />
               <Route exact path="/developers" component={Developers} />
             </div>
           </div>

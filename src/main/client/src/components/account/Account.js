@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 
+import moment from "moment-timezone";
+import ReactMoment from "react-moment";
+
 // Import common
 import Spinner from "../common/Spinner";
 import Title from "../common/Title";
@@ -47,7 +50,7 @@ export class Account extends Component {
 
     componentDidMount(){
         console.log("componentDidMount")
-        this.props.getUser(this.props.auth.user.userId);
+        this.props.getUser(this.props.auth.user.userId, ()=>{});
     }
 
     render() {
@@ -63,7 +66,10 @@ export class Account extends Component {
             titles = user.titles.map(title => {
             
                 return (
-                    <Title key={title.titleId} title = {title.name}/>
+                    <div key={title.titleId}>
+                        <Link to="edit-profile"><i className="fa fa-pencil" /></Link>
+                        <Title key={title.titleId} title = {title.name}/>
+                    </div>
                 )
             })
         }
@@ -71,31 +77,34 @@ export class Account extends Component {
         let technologies = <Spinner width={20}/>;
 
         if(user.technologies.length === 0){
-            technologies = <span>No technologies found, <Link>add technologies</Link>.</span>
+            technologies = <span>No technologies found, <Link >add technologies</Link>.</span>
         }
         else {
             technologies = user.technologies.map(technology => {
             
                 return (
-                    <Technology key={technology.technologyId} technology = {technology.name}/>
+                    <div key={technology.technologyId}>
+                        <Link to="/edit-profile"><i className="fa fa-pencil" /></Link>
+                        <Technology key={technology.technologyId} technology = {technology.name}/>
+                    </div>
                 )
             })
         }
 
         let profileContent = (<div id="account-profile">
-                                <span>No profile found, <Link>setup your profile</Link>.</span>
+                                <span>No profile found, <Link to="/edit-profile">setup your profile</Link>.</span>
                             </div>)
 
         if(user.profile){
             profileContent = (<div id="account-profile">
-            <div className="account-profile-information" id="profile-label">
-                <p>Fullname: </p>
-                <p>Email Address: </p>
-            </div>
-            <div className="account-profile-information" id="profile-info">
-                <p>{`${user.profile.lastName}, ${user.profile.firstName} ${user.profile.middleName}`}</p>
-                <p>{user.profile.email}</p>
-            </div>
+                <Link to="/edit-profile"><i className="fa fa-pencil" /></Link>
+                <div id="account-profile-information">
+                    <p><strong>Fullname: </strong>{`${user.profile.lastName}, ${user.profile.firstName} ${user.profile.middleName}`}</p>
+                    <p><strong>Email Address: </strong>{user.profile.email}</p>
+                    <p><strong>Created At: </strong>{user.profile.createdAt ? <ReactMoment tz="Asia/Manila" format="lll">{user.profile.createdAt}</ReactMoment> : ""} </p>
+                    <p><strong>Last Update: </strong><ReactMoment tz="Asia/Manila" format="lll">{user.profile.updatedAt}</ReactMoment> </p>
+                </div>
+            
         </div>)
         }
 

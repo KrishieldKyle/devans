@@ -1,0 +1,32 @@
+#edit-profile-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#edit-profile-container #edit-profile-page-title{
+    padding-left: 5%;
+    font-weight: 500;
+    font-size: 1.3em;
+    margin: 40px 10px 40px;
+}
+
+#edit-profile-container .profile-fields form .loadingDiv,
+#edit-profile-container .profile-fields form .buttonDiv{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+#edit-profile-container .profile-fields form input[type=submit]{
+    padding: 5px 15px 5px;
+    margin: 20px 10px 20px;
+    font-size: .5em;
+    font-weight: 1000;
+    border-radius: 5px;
+    border: 1px solid rgb(34, 126, 187);
+    background: rgb(241, 241, 243);
+    cursor: pointer;
+    /* color: rgb(60, 187, 34); */
+}

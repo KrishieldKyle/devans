@@ -1,7 +1,9 @@
-import { GET_ERRORS, SET_CURRENT_USER, AUTH_LOADING, CLEAR_ERRORS, SET_MESSAGE } from './types'
+import { GET_ERRORS, SET_CURRENT_USER, AUTH_LOADING} from './types'
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
+import { setMessage } from "./messageActions";
+import { clearErrors } from "./errorActions";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
@@ -59,26 +61,11 @@ export const setCurrentUser = (decoded) => {
     }
 }
 
-// set Logged in user
-export const setMessage = (message) => {
-    return {
-        type: SET_MESSAGE,
-        payload: message
-    }
-}
-
 // set auth loading
 export const setAuthLoading = (isLoading) => {
     return {
         type: AUTH_LOADING,
         payload: isLoading
-    }
-}
-
-// clear errors
-export const clearErrors = () => {
-    return {
-        type: CLEAR_ERRORS
     }
 }
 
