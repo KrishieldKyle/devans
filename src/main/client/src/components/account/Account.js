@@ -12,8 +12,9 @@ import Technology from "../common/Technology";
 import TextField from "../common/TextField";
 import Button from "../common/Button";
 
-import { getUser, addOrUpdateProfile, updateUserTitles } from "../../actions/userActions";
+import { getUser, addOrUpdateProfile, updateUserTitles, updateUserTechnologies } from "../../actions/userActions";
 import { getTitles } from "../../actions/titlesActions";
+import { getTechnologies } from "../../actions/technologiesActions";
 
 // Import css
 import "./Account.css"
@@ -25,15 +26,25 @@ export class Account extends Component {
         this.state = {
             auth: {},
             titles: {},
+            technologies: {},
             titleCollasibleDiv: {
-                minHeight: "0px",
+                height: "0px",
                 padding: "0px 0px 0px 0px",
             },
             titleCollasibleHeaderDiv: {
-                minHeight: "0px",
+                height: "0px",
+                padding: "0px 0px 0px 0px",
+            },
+            technologyCollasibleDiv: {
+                height: "0px",
+                padding: "0px 0px 0px 0px",
+            },
+            technologyCollasibleHeaderDiv: {
+                height: "0px",
                 padding: "0px 0px 0px 0px",
             },
             isTitleEditActive: false,
+            isTechnologyEditActive: false,
             technologyDivHeight: 0,
             inputedTitle: {
                 title: "",
@@ -45,6 +56,16 @@ export class Account extends Component {
                 isLoading: false
             },
             pendingRemovedTitles: [],
+            inputedTechnology: {
+                technology: "",
+                error: ""
+            },
+            tempTechnologiesList: {
+                technologies:[],
+                removeTechnologies: [],
+                isLoading: false
+            },
+            pendingRemovedTechnologies: [],
             user: {
                 profile: {},
                 titles: [],
@@ -53,8 +74,10 @@ export class Account extends Component {
         }
        
         this.onTitleEditClicked = this.onTitleEditClicked.bind(this);
+        this.onTechnologyEditClicked = this.onTechnologyEditClicked.bind(this);
         this.onChange = this.onChange.bind(this);
         this.addTitleOnTitleTempList = this.addTitleOnTitleTempList.bind(this);
+        this.addTechnologyOnTechnologyTempList = this.addTechnologyOnTechnologyTempList.bind(this);
     }
 
     componentDidUpdate(prevProps){
@@ -75,6 +98,12 @@ export class Account extends Component {
                 titles: this.props.titles
             })
         }
+
+        if(prevProps.technologies !== this.props.technologies){
+            this.setState({
+                technologies: this.props.technologies
+            })
+        }
     }
 
     onTitleEditClicked(){
@@ -87,11 +116,11 @@ export class Account extends Component {
             if(this.state.isTitleEditActive){
                 this.setState({
                     titleCollasibleDiv : {
-                        minHeight: "200px",
+                        height: "200px",
                         padding: "15px 0px 0px 0px",
                     },
                     titleCollasibleHeaderDiv: {
-                        minHeight: "50px",
+                        height: "50px",
                         padding: "0px 0px 0px 0px",
                     }
                 })
@@ -124,11 +153,11 @@ export class Account extends Component {
 
                 this.setState({
                     titleCollasibleDiv: {
-                        minHeight: "0px",
+                        height: "0px",
                         padding: "0px 0px 0px 0px",
                     },
                     titleCollasibleHeaderDiv: {
-                        minHeight: "0px",
+                        height: "0px",
                         padding: "0px 0px 0px 0px",
                     },
                     inputedTitle: {
@@ -141,6 +170,75 @@ export class Account extends Component {
                         isLoading: false
                     },
                     pendingRemovedTitles: []
+                })
+            }
+        }) 
+    }
+
+    onTechnologyEditClicked(){
+
+        this.setState({
+            isTechnologyEditActive : !this.state.isTechnologyEditActive
+
+        }, () => {
+
+            if(this.state.isTechnologyEditActive){
+                this.setState({
+                    technologyCollasibleDiv : {
+                        minHeight: "200px",
+                        padding: "15px 0px 0px 0px",
+                    },
+                    technologyCollasibleHeaderDiv: {
+                        minHeight: "50px",
+                        padding: "0px 0px 0px 0px",
+                    }
+                })
+            }
+            else{
+
+                const {tempTechnologiesList, user} = this.state;
+
+                let copyUserTechnologies = user.technologies;
+                let copyTempTechnologies = tempTechnologiesList.technologies;
+                let removedTechnologies = tempTechnologiesList.removeTechnologies;
+
+                if(copyTempTechnologies.length !== 0 || removedTechnologies.length !== 0){
+                    let newTechnologies = [...copyUserTechnologies, ...copyTempTechnologies]
+
+                    newTechnologies = newTechnologies.filter((newTechnology) => {
+                        return !removedTechnologies.find((removeTechnology) => {
+                          return newTechnology.technologyId === removeTechnology.technologyId
+                        })
+                      })
+                    //   console.log(newTechnologies)
+
+                      const technologiesData = {
+                          userId: this.state.user.userId,
+                          technologies: newTechnologies
+                      }
+
+                    this.props.updateUserTechnologies(technologiesData)
+                }
+
+                this.setState({
+                    technologyCollasibleDiv: {
+                        minHeight: "0px",
+                        padding: "0px 0px 0px 0px",
+                    },
+                    technologyCollasibleHeaderDiv: {
+                        minHeight: "0px",
+                        padding: "0px 0px 0px 0px",
+                    },
+                    inputedTechnology: {
+                        technology: "",
+                        error: ""
+                    },
+                    tempTechnologiesList: {
+                        technologies:[],
+                        removeTechnologies: [],
+                        isLoading: false
+                    },
+                    pendingRemovedTechnologies: []
                 })
             }
         }) 
@@ -233,6 +331,93 @@ export class Account extends Component {
         })
     }
 
+    addTechnologyOnTechnologyTempList(){
+
+        const {inputedTechnology, technologies, tempTechnologiesList, user}= this.state;
+
+        if(inputedTechnology.technology === ""){
+            this.setState({
+                inputedTechnology: {
+                    ...inputedTechnology,
+                    error: "Please enter a technology"
+                }
+            })
+            return;
+        }
+
+        this.setState({
+            tempTechnologiesList: {
+                ...tempTechnologiesList,
+                isLoading: true
+            }
+        }, () => {
+            let isTechnologyAlreadyAdded = false;
+
+            for(let x=0; x<tempTechnologiesList.technologies.length; x++){
+                if(tempTechnologiesList.technologies[x].name.toLowerCase() === inputedTechnology.technology.toLowerCase()){
+                    isTechnologyAlreadyAdded= true;
+                }
+                break;
+            }
+
+            for(let x=0; x<user.technologies.length; x++){
+                if(user.technologies[x].name.toLowerCase() === inputedTechnology.technology.toLowerCase()){
+                    isTechnologyAlreadyAdded= true;
+                }
+                break;
+            }
+
+            if(!isTechnologyAlreadyAdded){
+                let newTechnology = {
+                    technologyId: 0,
+                    name: inputedTechnology.technology
+                };
+                
+                for(let x = 0; x<technologies.technologies.length; x++){
+                    if(technologies.technologies[x].name.toLowerCase() === inputedTechnology.technology.toLowerCase()){
+        
+                        newTechnology = {
+                            technologyId: technologies.technologies[x].technologyId,
+                            name : technologies.technologies[x].name
+                        }
+                        break;  
+                    }
+                }
+
+                this.setState({
+                    tempTechnologiesList: {
+                        ...tempTechnologiesList,
+                        technologies: [...tempTechnologiesList.technologies, newTechnology]
+                    },
+                    inputedTechnology: {
+                        error: "",  
+                        technology: ""
+                    }
+                }, () => {
+                    this.setState({
+                        tempTechnologiesList: {
+                            ...this.state.tempTechnologiesList,
+                            isLoading: false
+                        }
+                    })
+                    console.log(this.state.tempTechnologiesList)
+                })
+            }
+            else {
+                this.setState({
+                    tempTechnologiesList: {
+                        ...this.state.tempTechnologiesList,
+                        isLoading: false
+                    },
+                    inputedTechnology: {
+                        ...inputedTechnology,
+                        error: "Please enter new technology"
+                    }
+                })
+            }
+        })
+    }
+
     onTitleRemoveFromUserClicked(removedTitle){
 
         const {tempTitlesList, pendingRemovedTitles} = this.state;
@@ -252,6 +437,29 @@ export class Account extends Component {
                 pendingRemovedTitles: newPendingRemoveTitles
             },() => {
                 console.log(this.state.tempTitlesList.removeTitles);
+            })
+        }
+    }
+
+    onTechnologyRemoveFromUserClicked(removedTechnology){
+
+        const {tempTechnologiesList, pendingRemovedTechnologies} = this.state;
+
+        if(pendingRemovedTechnologies.indexOf(removedTechnology.technologyId) == -1){
+
+            const newRemovedTechnologiesList = tempTechnologiesList.removeTechnologies;
+            newRemovedTechnologiesList.push(removedTechnology);
+            const newPendingRemoveTechnologies = pendingRemovedTechnologies;
+            newPendingRemoveTechnologies.push(removedTechnology.technologyId)
+    
+            this.setState({
+                tempTechnologiesList: {
+                    ...tempTechnologiesList,
+                    removeTechnologies: newRemovedTechnologiesList
+                },
+                pendingRemovedTechnologies: newPendingRemoveTechnologies
+            },() => {
+                console.log(this.state.tempTechnologiesList.removeTechnologies);
             })
         }
     }
@@ -278,6 +486,28 @@ export class Account extends Component {
 
     }
 
+    onTechnologyRecycleFromUserClicked(recycleTechnology){
+
+        const {pendingRemovedTechnologies, tempTechnologiesList} = this.state;
+
+        const newPendingRemoveTechnologies = pendingRemovedTechnologies;
+        const newRemoveTechnologies = tempTechnologiesList.removeTitles;
+
+        let index = newPendingRemoveTechnologies.indexOf(recycleTechnology.technologyId)
+
+        newPendingRemoveTechnologies.splice(index, 1)
+        newRemoveTechnologies.splice(index, 1)
+
+        this.setState({
+            pendingRemovedTechnologies: newPendingRemoveTechnologies,
+            tempTechnologiesList: {
+                ...tempTechnologiesList,
+                removedTechnologies: newRemoveTechnologies
+            }
+        })
+
+    }
+
     onTitleRemoveFromPendingClicked(title){
         
         const {tempTitlesList} = this.state;
@@ -294,6 +524,26 @@ export class Account extends Component {
             tempTitlesList: {
                 ...tempTitlesList,
                 titles: newTempTitles
+            }
+        })
+    }
+
+    onTechnologyRemoveFromPendingClicked(technology){
+        
+        const {tempTechnologiesList} = this.state;
+
+        let newTempTechnologies = tempTechnologiesList.technologies;
+
+        for(let x=0; x<tempTechnologiesList.technologies.length; x++){
+            if(tempTechnologiesList.technologies[x].name.toLowerCase() === technology.toLowerCase() ){
+                newTempTechnologies.splice(x, 1);
+                break;
+            }
+        }
+        this.setState({
+            tempTechnologiesList: {
+                ...tempTechnologiesList,
+                technologies: newTempTechnologies
             }
         })
     }
@@ -339,11 +589,12 @@ export class Account extends Component {
     componentDidMount(){
         this.props.getUser(this.props.auth.user.userId, ()=>{});
         this.props.getTitles();
+        this.props.getTechnologies();
     }
 
     render() {
 
-        const { user, isTitleEditActive, titleCollasibleDiv, titleCollasibleHeaderDiv,inputedTitle, tempTitlesList, pendingRemovedTitles } = this.state;
+        const { user, isTitleEditActive, isTechnologyEditActive, titleCollasibleDiv, technologyCollasibleDiv, titleCollasibleHeaderDiv, technologyCollasibleHeaderDiv,inputedTitle,inputedTechnology, tempTitlesList, tempTechnologiesList, pendingRemovedTitles, pendingRemovedTechnologies } = this.state;
 
         let pendingTitles;
 
@@ -367,6 +618,34 @@ export class Account extends Component {
                             isTitleEditClicked = {isTitleEditActive} 
                             key = {title.name} 
                             title = {title.name}/>
+                    )
+                })
+            }
+            
+        }
+
+        let pendingTechnologies;
+
+        let technologyAddButton;
+
+        if(tempTechnologiesList.isLoading){
+            pendingTechnologies = <Spinner width={20}/>;
+            technologyAddButton = <Spinner width={20}/>;
+        }
+        else{
+            technologyAddButton = <Button value="Add Technology" fontWeight="500" onClick={this.addTechnologyOnTechnologyTempList}/>
+
+            if(tempTechnologiesList.technologies.length === 0){
+                pendingTechnologies = <span>Nothing to show</span>;
+            }
+            else {
+                pendingTechnologies = tempTechnologiesList.technologies.map(technology => {
+                    return (
+                            <Technology 
+                            technologyRemove={() => this.onTechnologyRemoveFromPendingClicked(technology.name)} 
+                            isTechnologyEditClicked = {isTechnologyEditActive} 
+                            key = {technology.name} 
+                            technology = {technology.name}/>
                     )
                 })
             }
@@ -413,20 +692,46 @@ export class Account extends Component {
                 })
             }
         }
-        
 
-        let technologies = <Spinner width={20}/>;
+        let technologies;
 
-        if(user.technologies.length === 0){
-            technologies = <span>No technologies found, <Link >add technologies</Link>.</span>
+        if(user.isUpdateUserTitlesLoading){
+            technologies = <Spinner width={20}/>;
         }
         else {
-            technologies = user.technologies.map(technology => {
-            
-                return (
-                    <Technology key={technology.technologyId} technology = {technology.name}/>
-                )
-            })
+            if(user.technologies.length === 0){
+                if(isTechnologyEditActive){
+                    technologies = <Button value="Save Technologies" margin="5px 0px 5px 0px" fontWeight="500" onClick={this.onTechnologyEditClicked}/>
+                }
+                else{
+                    technologies = <span>No technologies found, <Link to="#" onClick={this.onTechnologyEditClicked}>add technologies</Link></span>
+                }
+            }
+            else {
+                technologies = user.technologies.map(technology => {
+    
+                    let pendingRemove = false;
+    
+                    if(pendingRemovedTechnologies.indexOf(technology.technologyId) !== -1){
+                        pendingRemove= true;
+                    }
+    
+                    return (<Technology 
+                        technologyRemove={() => this.onTechnologyRemoveFromUserClicked({
+                                technologyId: technology.technologyId, 
+                                name: technology.name
+                            })} 
+                        technologyRecycle={() => this.onTechnologyRecycleFromUserClicked({
+                            technologyId: technology.technologyId, 
+                            name: technology.name
+                        })}
+                        pendingRemove={pendingRemove}
+                        isTechnologyEditClicked = {isTechnologyEditActive} 
+                        key = {technology.technologyId} 
+                        technology = {technology.name}/>)
+                    
+                })
+            }
         }
 
         let profileContent = (<div id="account-profile">
@@ -464,14 +769,14 @@ export class Account extends Component {
                         className={isTitleEditActive ? "fa fa-save account-edit": "fa fa-pencil account-edit"} 
                         title={isTitleEditActive ? "Save": "Edit"} 
                         />}
-                    <div id="title-collapsible-header-div" style={titleCollasibleHeaderDiv}>
+                    <div className="account-collapsible-header-div" style={titleCollasibleHeaderDiv}>
                         <p>Add or Remove a Title</p>
                     </div>
-                    <div id="titles-div">
+                    <div className="techtitle-div">
                         {titles}
                     </div>
-                    <div id="title-collapsible-div" style={titleCollasibleDiv}>
-                        <div className="title-input-div">
+                    <div className="account-collapsible-div" style={titleCollasibleDiv}>
+                        <div className="account-input-div">
                             <TextField 
                                 name="inputedTitle.title"
                                 placeholder="Input Title"
@@ -483,18 +788,47 @@ export class Account extends Component {
                             />
                             {titleAddButton}
                         </div>
-                        <div id="pending-titles-div">
-                            <p className="pending-titles-header">Titles to be added:</p>
-                            <div className="pending-titles">
+                        <div className="pending-techtitle-div">
+                            <p className="pending-techtitle-header">Titles to be added:</p>
+                            <div className="pending-techtitles">
                                 {pendingTitles}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div ref={this.technologyDiv} className="account-information">
+                <div className="account-information">
                     <p className="account-label">Technologies</p>
-                    {user.technologies.length === 0 ? "" : <Link to="edit-profile"><i className="fa fa-pencil" /></Link>}
-                    {technologies}
+                    {user.technologies.length === 0 ? "" : 
+                        <i onClick={this.onTechnologyEditClicked} 
+                        className={isTechnologyEditActive ? "fa fa-save account-edit": "fa fa-pencil account-edit"} 
+                        title={isTechnologyEditActive ? "Save": "Edit"} 
+                        />}
+                    <div className="account-collapsible-header-div" style={technologyCollasibleHeaderDiv}>
+                        <p>Add or Remove a Technology</p>
+                    </div>
+                    <div className="techtitle-div">
+                        {technologies}
+                    </div>
+                    <div className="account-collapsible-div" style={technologyCollasibleDiv}>
+                        <div className="account-input-div">
+                            <TextField 
+                                name="inputedTechnology.technology"
+                                placeholder="Input Technology"
+                                value={inputedTechnology.technology}
+                                onChange={this.onChange}
+                                width="70%"
+                                margin="0px"
+                                error= {inputedTechnology.error}
+                            />
+                            {technologyAddButton}
+                        </div>
+                        <div className="pending-techtitle-div">
+                            <p className="pending-techtitle-header">Technologies to be added:</p>
+                            <div className="pending-techtitles">
+                                {pendingTechnologies}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
@@ -508,13 +842,16 @@ Account.propTypes = {
     getUser: PropTypes.func.isRequired,
     addOrUpdateProfile: PropTypes.func.isRequired,
     updateUserTitles: PropTypes.func.isRequired,
-    getTitles: PropTypes.func.isRequired
+    updateUserTechnologies: PropTypes.func.isRequired,
+    getTitles: PropTypes.func.isRequired,
+    getTechnologies: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
     user: state.user,
-    titles: state.titles
+    titles: state.titles,
+    technologies: state.technologies
 })
 
-export default connect(mapStateToProps, {getUser, addOrUpdateProfile, getTitles, updateUserTitles})(Account)
+export default connect(mapStateToProps, {getUser, addOrUpdateProfile, getTitles, getTechnologies, updateUserTitles, updateUserTechnologies})(Account)

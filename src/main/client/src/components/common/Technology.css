@@ -2,12 +2,43 @@
     border: 1px solid rgb(204, 144, 65);
     overflow: auto;
     margin: 2px;
-    padding: 5px 10px 5px;
+    padding: 5px 20px 5px;
     border-radius: 5px;
+}
+
+.technology-container.pending-remove {
+    position: relative;
+    border: 1px solid rgba(255, 0, 0, 0.651);
+    margin: 2px;
+    padding: 5px 20px 5px;
+    border-radius: 5px;
+    
+}
+
+.technology-container.swing {
+    animation: swing ease-in-out 0.3s infinite alternate;
 }
 
 .technology-container p{
     margin: 0;
     font-size: .6em;
     
+}
+
+.technology-container i{
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 0.5em;
+    color: rgba(255, 0, 0, 0.651);
+    cursor: pointer;
+}
+
+.technology-container i.pending-remove{
+    color: rgb(102, 191, 226);
+}
+
+@keyframes swing {
+    0% { transform: rotate(1deg); }
+    100% { transform: rotate(-1deg); }
 }

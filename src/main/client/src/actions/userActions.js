@@ -3,7 +3,9 @@ import { GET_USER,
     SAVE_PROFILE_LOADING, 
     GET_USER_LOADING,
     UPDATE_USER_TITLES,
-    UPDATE_USER_TITLES_LOADING
+    UPDATE_USER_TITLES_LOADING,
+    UPDATE_USER_TECHNOLOGIES,
+    UPDATE_USER_TECHNOLOGIES_LOADING
 } from './types';
 
 import { setMessage } from "./messageActions";
@@ -67,5 +69,25 @@ export const updateUserTitles = (newTitles) => dispatch => {
             dispatch(setMessage({message: err.response.data.message, isSuccess: err.response.data.success, isMessageShowing: true}));
             dispatch(getErrors(err.response.data))
             dispatch(setLoading(UPDATE_USER_TITLES_LOADING,false))
+        })
+}
+
+export const updateUserTechnologies = (newTechnologies) => dispatch => {
+    dispatch(setLoading(UPDATE_USER_TECHNOLOGIES_LOADING,true))
+    axios.post(`/api/user/technologies`, newTechnologies)
+        .then(res => {
+            dispatch(setMessage({message: res.data.message, isSuccess: res.data.success, isMessageShowing: true}));
+            dispatch({
+                type: UPDATE_USER_TECHNOLOGIES,
+                payload: res.data.technologies
+            })
+            // history.push("/account")
+            dispatch(clearErrors())
+            dispatch(setLoading(UPDATE_USER_TECHNOLOGIES_LOADING,false))
+        })
+        .catch(err => {
+            dispatch(setMessage({message: err.response.data.message, isSuccess: err.response.data.success, isMessageShowing: true}));
+            dispatch(getErrors(err.response.data))
+            dispatch(setLoading(UPDATE_USER_TECHNOLOGIES_LOADING,false))
         })
 }
