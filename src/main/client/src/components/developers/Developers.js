@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getDevelopers, setDevelopersLoading } from '../../actions/developersActions';
+import { getDevelopers } from '../../actions/developersActions';
 
 // Import components
 import DeveloperCard from "./DeveloperCard";
@@ -66,7 +66,6 @@ export class Developers extends Component {
 
 Developers.propTypes = {
     getDevelopers: PropTypes.func.isRequired,
-    setDevelopersLoading: PropTypes.func.isRequired,
     developers: PropTypes.object.isRequired
 }
 
@@ -74,4 +73,4 @@ const mapStateToProps = (state) => ({
     developers: state.developers
 })
 
-export default connect(mapStateToProps, { getDevelopers, setDevelopersLoading })(Developers);
+export default connect(mapStateToProps, { getDevelopers })(Developers);

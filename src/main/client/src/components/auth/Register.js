@@ -9,6 +9,7 @@ import { closeMessage } from '../../actions/messageActions';
 // Import Commons
 import TextField from "../common/TextField";
 import Spinner from "../common/Spinner";
+import SubmitButton from "../common/Button";
 
 // Import Css
 import "./Auth.css"
@@ -75,7 +76,7 @@ export class Register extends Component {
         else {
             button = (
                 <div className="buttonDiv">
-                            <input type="submit" value="Register" />
+                            <SubmitButton type="submit" value="Register" />
                             <span>Already have an account? <Link to="/login">Login</Link></span>
                         </div>
             )
@@ -94,6 +95,7 @@ export class Register extends Component {
                             value={this.state.username}
                             error={errors.message ? " " : errors.username}
                             onChange={this.onChange}
+                            width="70%"
                         />
                         <TextField 
                             placeholder="Password"
@@ -102,6 +104,7 @@ export class Register extends Component {
                             value={this.state.password}
                             error={errors.password}
                             onChange={this.onChange}
+                            width="70%"
                         />
                         <TextField 
                             placeholder="Confirm Password"
@@ -110,6 +113,7 @@ export class Register extends Component {
                             value={this.state.confirmPassword}
                             error={errors.confirmPassword}
                             onChange={this.onChange}
+                            width="70%"
                         />
                         {button}
                         

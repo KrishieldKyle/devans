@@ -1,11 +1,12 @@
-import { GET_USER, SET_USER_PROFILE, SAVE_PROFILE_LOADING, GET_USER_LOADING } from '../actions/types';
+import { GET_USER, SET_USER_PROFILE, SAVE_PROFILE_LOADING, GET_USER_LOADING, UPDATE_USER_TITLES, UPDATE_USER_TITLES_LOADING } from '../actions/types';
 
 const initialState = {
     profile: {},
     titles: [],
     technologies: [],
     isSaveProfileLoading: false,
-    isGetUserLoading: false
+    isGetUserLoading: false,
+    isUpdateUserTitlesLoading: false,
 }
 
 export default function (state = initialState, action) {
@@ -17,6 +18,11 @@ export default function (state = initialState, action) {
                 ...state,
                 profile: action.payload
             }
+        case UPDATE_USER_TITLES: 
+            return {
+                ...state,
+                titles: action.payload
+            }
         case SAVE_PROFILE_LOADING: 
             return {
                 ...state,
@@ -26,6 +32,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 isGetUserLoading: action.payload
+            }
+        case UPDATE_USER_TITLES_LOADING: 
+            return {
+                ...state,
+                isUpdateUserTitlesLoading: action.payload
             }
         default:
             return state;

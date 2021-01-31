@@ -4,11 +4,16 @@
     width: 100%;
 }
 
+#edit-profile-container a{
+    margin: 10px;
+    font-size: 0.7em;
+}
+
 #edit-profile-container #edit-profile-page-title{
     padding-left: 5%;
     font-weight: 500;
     font-size: 1.3em;
-    margin: 40px 10px 40px;
+    margin: 20px 10px 20px;
 }
 
 #edit-profile-container .profile-fields form .loadingDiv,

@@ -12,6 +12,8 @@ export class Message extends Component {
         this.state = {
             message: {},
             messageTimer: null,
+            messageInterval: null,
+            loadingPercentage: 10,
             isSuccessCopy: false,
             messageCopy: ""
         }
@@ -21,6 +23,7 @@ export class Message extends Component {
 
     closeMessage(){
         clearTimeout(this.state.messageTimer);
+        clearInterval(this.state.messageInterval)
         this.props.closeMessage();
     }
 
@@ -35,10 +38,20 @@ export class Message extends Component {
                     isSuccessCopy: this.props.message.isSuccess
                 }, () => {
                     clearTimeout(this.state.messageTimer);
+                    clearInterval(this.state.messageInterval)
                     this.setState({
+                        messageInterval : setInterval(() => {
+                            this.setState({
+                                loadingPercentage: this.state.loadingPercentage+10
+                            }, () => {
+                                // console.log(parseFloat((this.state.loadingPercentage / 5000) * 100).toFixed(2).toString().replace(/\.00$/, ''));
+                            })
+                            
+                        }, 10),
                         messageTimer : setTimeout(() => {
                             this.props.closeMessage();
-                        }, 5000)
+                            clearInterval(this.state.messageInterval)
+                        }, 5500)
                     })
                 })
             }
@@ -59,7 +72,10 @@ export class Message extends Component {
             <div id="message-container" className={message ? "show-message" : "hide-message"}>
                 <div id="message" className={isSuccessCopy ? "success" : "failed"}>
                     <p>{messageCopy}</p>
-                        <i className="fa fa-close" onClick={this.closeMessage}></i>
+                    <i className="fa fa-close" onClick={this.closeMessage}></i>
+                    <div id="message-loading-bar">
+                        <div />
+                    </div>
                 </div>
             </div>
         )

@@ -8,6 +8,7 @@ import { clearErrors } from '../../actions/errorActions';
 // Import Commons
 import Spinner from "../common/Spinner";
 import TextField from "../common/TextField";
+import SubmitButton from "../common/Button";
 
 // Import Css
 import "./Auth.css"
@@ -74,7 +75,7 @@ export class Login extends Component {
         else {
             button = (
                 <div className="buttonDiv">
-                            <input type="submit" value="Login" />
+                            <SubmitButton type="submit" value="Login" />
                             <span>Don't have an account? <Link to="/register">Register</Link></span>
                         </div>
             )
@@ -92,6 +93,7 @@ export class Login extends Component {
                             value={this.state.username}
                             error={errors.username}
                             onChange={this.onChange}
+                            width="70%"
                         />
                         <TextField 
                             placeholder="Password"
@@ -100,6 +102,7 @@ export class Login extends Component {
                             value={this.state.password}
                             error={errors.password}
                             onChange={this.onChange}
+                            width="70%"
                         />
                         {button}
                         

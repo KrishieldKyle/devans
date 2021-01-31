@@ -42,7 +42,7 @@
     background: rgba(34, 126, 187, 0.589);
 }
 
-#account-container i {
+#account-container .account-edit {
     display: inline;
     margin: 0;
     position: absolute;
@@ -86,11 +86,65 @@
     font-size: 0.6em;
 }
 
-#account-container #account-titles-container, 
-#account-container #account-technologies-container{
-    
+#account-container #titles-div{
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: left;
+    flex-wrap: wrap;
 }
+
+#account-container #title-collapsible-header-div{
+    height: 0;
+    overflow: hidden;
+    transition: 0.5s;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#account-container #title-collapsible-header-div p{
+   padding: 0;
+   margin: 0;
+   font-size: 0.7em;
+}
+
+#account-container #title-collapsible-div{
+    height: 0;
+    overflow: hidden;
+    transition: 0.5s;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#account-container #title-collapsible-div #pending-titles-div{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    width: 100%;
+}
+
+#account-container #title-collapsible-div #pending-titles-div .pending-titles-header{
+    padding: 0;
+    margin: 10px 0px 5px 0px;
+    font-size: 0.7em;
+}
+
+#account-container #title-collapsible-div #pending-titles-div .pending-titles{
+    display: flex;
+    align-items: left;
+    width: 100%;
+    flex-wrap: wrap;
+    overflow: auto;
+    max-height: 95px;
+}
+
+#account-container #title-collapsible-div #pending-titles-div .pending-titles span{
+    font-size: 0.6em;
+}
+
+#account-container #title-collapsible-div .title-input-div{
+    display: flex;
+    width: 100%;
+}
+

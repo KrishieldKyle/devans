@@ -1,13 +1,46 @@
 .title-container {
+    position: relative;
     border: 1px solid rgb(102, 191, 226);
-    overflow: auto;
     margin: 2px;
-    padding: 5px 10px 5px;
+    padding: 5px 20px 5px;
     border-radius: 5px;
+    
 }
+
+.title-container.pending-remove {
+    position: relative;
+    border: 1px solid rgba(255, 0, 0, 0.651);
+    margin: 2px;
+    padding: 5px 20px 5px;
+    border-radius: 5px;
+    
+}
+
+.title-container.swing {
+    animation: swing ease-in-out 0.3s infinite alternate;
+}
+
 
 .title-container p{
     margin: 0;
     font-size: .6em;
     
+}
+
+.title-container i{
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 0.5em;
+    color: rgba(255, 0, 0, 0.651);
+    cursor: pointer;
+}
+
+.title-container i.pending-remove{
+    color: rgb(102, 191, 226);
+}
+
+@keyframes swing {
+    0% { transform: rotate(1deg); }
+    100% { transform: rotate(-1deg); }
 }

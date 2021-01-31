@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getUser, addOrUpdateProfile } from "../../actions/userActions";
 import { clearErrors } from '../../actions/errorActions';
+import { Link } from "react-router-dom";
 
 // Import commons
 import TextField from "../common/TextField";
@@ -52,10 +53,10 @@ export class EditProfile extends Component {
         this.props.getUser(this.props.auth.user.userId, () => {
             this.setState({
                 auth : this.props.auth,
-                firstName: this.props.user.profile.firstName,
-                lastName: this.props.user.profile.lastName,
-                middleName: this.props.user.profile.middleName,
-                email: this.props.user.profile.email
+                firstName: this.props.user.profile.firstName || "",
+                lastName: this.props.user.profile.lastName || "",
+                middleName: this.props.user.profile.middleName || "",
+                email: this.props.user.profile.email || ""
             })  
         });
         
@@ -84,7 +85,7 @@ export class EditProfile extends Component {
 
         const { errors } = this.state;
 
-        const { isSaveProfileLoading, isGetUserLoading } = this.props.user;
+        const { isSaveProfileLoading, isGetUserLoading, profile } = this.props.user;
 
         let button;
 
@@ -94,7 +95,7 @@ export class EditProfile extends Component {
         else {
             button = (
                 <div className="buttonDiv">
-                            <input type="submit" value="Add Profile" />
+                            <input type="submit" value={profile ? "Edit Profile" : "Add Profile" } />
                         </div>
             )
         }
@@ -147,7 +148,8 @@ export class EditProfile extends Component {
 
         return (
             <div id="edit-profile-container">
-                <p id="edit-profile-page-title">Edit Profile</p>
+                <Link to="/account" >Go Back</Link>
+                <p id="edit-profile-page-title">{profile ? "Edit Profile" : "Add Profile"}</p>
                 {editProfileContent}
             </div>
         )

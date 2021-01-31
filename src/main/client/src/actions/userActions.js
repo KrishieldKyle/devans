@@ -1,33 +1,37 @@
-import { GET_USER, GET_ERRORS, SET_USER_PROFILE, SAVE_PROFILE_LOADING, GET_USER_LOADING } from './types';
+import { GET_USER, 
+    SET_USER_PROFILE, 
+    SAVE_PROFILE_LOADING, 
+    GET_USER_LOADING,
+    UPDATE_USER_TITLES,
+    UPDATE_USER_TITLES_LOADING
+} from './types';
 
 import { setMessage } from "./messageActions";
-import { clearErrors } from "./errorActions";
+import { clearErrors, getErrors } from "./errorActions";
+import { setLoading } from "./commonActions";
 
 import axios from "axios";
 
 // get user
 export const getUser = (userId, callback) => dispatch => {
-    dispatch(setGetUserLoading(true))
+    dispatch(setLoading(GET_USER_LOADING, true))
     axios.get(`/api/user/${userId}`)
         .then(res => {
             dispatch({
                 type: GET_USER,
                 payload: res.data.user
             })
-            dispatch(setGetUserLoading(false))
+            dispatch(setLoading(GET_USER_LOADING, false))
             callback();
         })
         .catch(err => {
-            dispatch(setGetUserLoading(false))
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.response.data
-            })
+            dispatch(setLoading(GET_USER_LOADING, false))
+            dispatch(getErrors(err.response.data))
         })
 }
 
 export const addOrUpdateProfile = (profileData, history) => dispatch => {
-    dispatch(setSaveProfileLoading(true))
+    dispatch(setLoading(SAVE_PROFILE_LOADING,true))
     axios.post(`/api/profile/`, profileData)
         .then(res => {
             dispatch(setMessage({message: res.data.message, isSuccess: res.data.success, isMessageShowing: true}));
@@ -37,31 +41,31 @@ export const addOrUpdateProfile = (profileData, history) => dispatch => {
             })
             // history.push("/account")
             dispatch(clearErrors())
-            dispatch(setSaveProfileLoading(false))
+            dispatch(setLoading(SAVE_PROFILE_LOADING,false))
         })
         .catch(err => {
             dispatch(setMessage({message: err.response.data.message, isSuccess: err.response.data.success, isMessageShowing: true}));
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.response.data
-            })
-            dispatch(setSaveProfileLoading(false))
+            dispatch(getErrors(err.response.data))
+            dispatch(setLoading(SAVE_PROFILE_LOADING, false))
         })
 }
 
-
-// set save profile loading
-export const setSaveProfileLoading = (isLoading) => {
-    return {
-        type: SAVE_PROFILE_LOADING,
-        payload: isLoading
-    }
-}
-
-// set get user loading
-export const setGetUserLoading = (isLoading) => {
-    return {
-        type: GET_USER_LOADING,
-        payload: isLoading
-    }
+export const updateUserTitles = (newTitles) => dispatch => {
+    dispatch(setLoading(UPDATE_USER_TITLES_LOADING,true))
+    axios.post(`/api/user/titles`, newTitles)
+        .then(res => {
+            dispatch(setMessage({message: res.data.message, isSuccess: res.data.success, isMessageShowing: true}));
+            dispatch({
+                type: UPDATE_USER_TITLES,
+                payload: res.data.titles
+            })
+            // history.push("/account")
+            dispatch(clearErrors())
+            dispatch(setLoading(UPDATE_USER_TITLES_LOADING,false))
+        })
+        .catch(err => {
+            dispatch(setMessage({message: err.response.data.message, isSuccess: err.response.data.success, isMessageShowing: true}));
+            dispatch(getErrors(err.response.data))
+            dispatch(setLoading(UPDATE_USER_TITLES_LOADING,false))
+        })
 }
