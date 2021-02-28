@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,19 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.haphor.social.dto.jwt.UserJwtDTO;
-import com.haphor.social.dto.request.AddTechnologiesToUserRequestDTO;
-import com.haphor.social.dto.request.AddTitlesToUserRequestDTO;
+import com.haphor.social.dto.request.AddOrDeleteUserTechnologiesRequestDTO;
+import com.haphor.social.dto.request.AddOrDeleteUserTitlesRequestDTO;
 import com.haphor.social.dto.request.AuthenticationRequestDTO;
-import com.haphor.social.dto.request.DeleteTechnologiesFromUserRequestDTO;
-import com.haphor.social.dto.request.DeleteTitlesFromUserRequestDTO;
 import com.haphor.social.dto.request.UserPasswordUpdateRequestDTO;
 import com.haphor.social.dto.request.UserRegistrationRequestDTO;
 import com.haphor.social.dto.response.AllUsersResponseDTO;
 import com.haphor.social.dto.response.AuthenticationResponseDTO;
-import com.haphor.social.dto.response.UserTechnologiesResponseDTO;
-import com.haphor.social.dto.response.UserTitlesResponseDTO;
 import com.haphor.social.dto.response.UserRegistrationResponseDTO;
 import com.haphor.social.dto.response.UserResponseDTO;
+import com.haphor.social.dto.response.UserTechnologiesResponseDTO;
+import com.haphor.social.dto.response.UserTitlesResponseDTO;
 import com.haphor.social.dto.response.UserUpdatePasswordResponseDTO;
 import com.haphor.social.model.User;
 import com.haphor.social.service.UserService;
@@ -142,37 +139,37 @@ public class UserController {
 	}
 	
 	@PostMapping("/titles")
-	public ResponseEntity<?> addTitlesToUser(@RequestBody AddTitlesToUserRequestDTO addTitlesToUserRequestDTO) {
+	public ResponseEntity<?> addTitlesToUser(@RequestBody AddOrDeleteUserTitlesRequestDTO addOrDeleteUserTitlesRequestDTO) {
 		
-		UserTitlesResponseDTO response = userService.addTitlesToUser(addTitlesToUserRequestDTO);
+		UserTitlesResponseDTO response = userService.addOrDeleteUserTitles(addOrDeleteUserTitlesRequestDTO);
 		
 		return ResponseEntity.status(response.getHttpStatus()).body(response);
 		
 	}
 	
-	@DeleteMapping("/titles")
-	public ResponseEntity<?> deleteTitlesFromUser(@RequestBody DeleteTitlesFromUserRequestDTO deleteTitlesFromUserRequestDTO) {
-		
-		UserTitlesResponseDTO response = userService.deleteTitlesFromUser(deleteTitlesFromUserRequestDTO);
-		
-		return ResponseEntity.status(response.getHttpStatus()).body(response);
-	}
+//	@DeleteMapping("/titles")
+//	public ResponseEntity<?> deleteTitlesFromUser(@RequestBody DeleteTitlesFromUserRequestDTO deleteTitlesFromUserRequestDTO) {
+//		
+//		UserTitlesResponseDTO response = userService.deleteTitlesFromUser(deleteTitlesFromUserRequestDTO);
+//		
+//		return ResponseEntity.status(response.getHttpStatus()).body(response);
+//	}
 	
 	@PostMapping("/technologies")
-	public ResponseEntity<?> addTechnologiesToUser(@RequestBody AddTechnologiesToUserRequestDTO addTechnologiesToUserRequestDTO) {
-		UserTechnologiesResponseDTO response = userService.addTechnologiesToUser(addTechnologiesToUserRequestDTO);
+	public ResponseEntity<?> addTechnologiesToUser(@RequestBody AddOrDeleteUserTechnologiesRequestDTO addOrDeleteUserTechnologiesRequestDTO) {
+		UserTechnologiesResponseDTO response = userService.addOrDeleteUserTechnologies(addOrDeleteUserTechnologiesRequestDTO);
 		
 		return ResponseEntity.status(response.getHttpStatus()).body(response);
 		
 	}
 	
-	@DeleteMapping("/technologies")
-	public ResponseEntity<?> deleteTechnologiesFromUser(@RequestBody DeleteTechnologiesFromUserRequestDTO deleteTechnologiesFromUserRequestDTO) {
-		
-		UserTechnologiesResponseDTO response = userService.deleteTechnologiesFromUser(deleteTechnologiesFromUserRequestDTO);
-		
-		return ResponseEntity.status(response.getHttpStatus()).body(response);
-		
-	}
+//	@DeleteMapping("/technologies")
+//	public ResponseEntity<?> deleteTechnologiesFromUser(@RequestBody DeleteTechnologiesFromUserRequestDTO deleteTechnologiesFromUserRequestDTO) {
+//		
+//		UserTechnologiesResponseDTO response = userService.deleteTechnologiesFromUser(deleteTechnologiesFromUserRequestDTO);
+//		
+//		return ResponseEntity.status(response.getHttpStatus()).body(response);
+//		
+//	}
 
 }

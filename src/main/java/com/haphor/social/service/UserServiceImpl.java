@@ -20,17 +20,15 @@ import com.haphor.social.dto.TechnologyDTO;
 import com.haphor.social.dto.TitleDTO;
 import com.haphor.social.dto.UserDTO;
 import com.haphor.social.dto.UserProfileDTO;
-import com.haphor.social.dto.request.AddTechnologiesToUserRequestDTO;
-import com.haphor.social.dto.request.AddTitlesToUserRequestDTO;
-import com.haphor.social.dto.request.DeleteTechnologiesFromUserRequestDTO;
-import com.haphor.social.dto.request.DeleteTitlesFromUserRequestDTO;
+import com.haphor.social.dto.request.AddOrDeleteUserTechnologiesRequestDTO;
+import com.haphor.social.dto.request.AddOrDeleteUserTitlesRequestDTO;
 import com.haphor.social.dto.request.UserPasswordUpdateRequestDTO;
 import com.haphor.social.dto.request.UserRegistrationRequestDTO;
 import com.haphor.social.dto.response.AllUsersResponseDTO;
-import com.haphor.social.dto.response.UserTechnologiesResponseDTO;
-import com.haphor.social.dto.response.UserTitlesResponseDTO;
 import com.haphor.social.dto.response.UserRegistrationResponseDTO;
 import com.haphor.social.dto.response.UserResponseDTO;
+import com.haphor.social.dto.response.UserTechnologiesResponseDTO;
+import com.haphor.social.dto.response.UserTitlesResponseDTO;
 import com.haphor.social.dto.response.UserUpdatePasswordResponseDTO;
 import com.haphor.social.model.Technology;
 import com.haphor.social.model.Title;
@@ -94,7 +92,7 @@ public class UserServiceImpl implements UserService{
 			
 			UserProfile userProfile = user.getUserProfile();
 			
-			UserProfileDTO userProfileDTO = null;
+			UserProfileDTO userProfileDTO = new UserProfileDTO();
 			
 			if(userProfile != null) {
 				userProfileDTO = convertEntity.toUserProfileDTO(userProfile);
@@ -186,28 +184,28 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserTitlesResponseDTO addTitlesToUser(AddTitlesToUserRequestDTO addTitlesToUserRequestDTO) {
+	public UserTitlesResponseDTO addOrDeleteUserTitles(AddOrDeleteUserTitlesRequestDTO addOrDeleteTitlesRequestDTO) {
 		
 		User user = accessToken.getUserFromToken();
 
-		if(user.getUserId() != addTitlesToUserRequestDTO.getUserId()) {
-			return new UserTitlesResponseDTO(false, "User ID does not match to the currently logged in user",addTitlesToUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.UNAUTHORIZED);
+		if(user.getUserId() != addOrDeleteTitlesRequestDTO.getUserId()) {
+			return new UserTitlesResponseDTO(false, "User ID does not match to the currently logged in user",addOrDeleteTitlesRequestDTO.getUserId(), new HashSet<>(), HttpStatus.UNAUTHORIZED);
 		}
 		
-		if(addTitlesToUserRequestDTO.getTitles().size() == 0 ) {
-			return new UserTitlesResponseDTO(true, "No title has been added.", addTitlesToUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.OK);
+		if(addOrDeleteTitlesRequestDTO.getTitles().size() == 0 ) {
+			return new UserTitlesResponseDTO(true, "No title has been added.", addOrDeleteTitlesRequestDTO.getUserId(), new HashSet<>(), HttpStatus.OK);
 		}
 		
-		Set<Title> newTitles = convertDTO.toTitleEntities(addTitlesToUserRequestDTO.getTitles());
+		Set<Title> newTitles = convertDTO.toTitleEntities(addOrDeleteTitlesRequestDTO.getTitles());
 		
 		titleDao.saveAll(newTitles);
 		
-		Set<Title> userTitles = user.getTitles();
-		
-		userTitles.addAll(newTitles);
+//		Set<Title> userTitles = user.getTitles();
+//		
+//		userTitles.addAll(newTitles);
 		
 		// Set the new titles to user
-		user.setTitles(userTitles);
+		user.setTitles(newTitles);
 		
 		// Persists the user
 		user = userDao.save(user);
@@ -216,67 +214,67 @@ public class UserServiceImpl implements UserService{
 		
 		Set<TitleDTO> newTitleDtos = convertEntity.toTitleDTOs(user.getTitles());
 		
-		return new UserTitlesResponseDTO(true, "Titles have successfully added to the user", addTitlesToUserRequestDTO.getUserId(), newTitleDtos, HttpStatus.OK);
+		return new UserTitlesResponseDTO(true, "User titles have successfully updated.", addOrDeleteTitlesRequestDTO.getUserId(), newTitleDtos, HttpStatus.OK);
 		
 	}
 
-	@Override
-	public UserTitlesResponseDTO deleteTitlesFromUser(DeleteTitlesFromUserRequestDTO deleteTitlesFromUserRequestDTO) {
-		
-		User user = accessToken.getUserFromToken();
-		
-		if(user.getUserId() != deleteTitlesFromUserRequestDTO.getUserId()) {
-			return new UserTitlesResponseDTO(false, "User ID does not match to the currently logged in user",deleteTitlesFromUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.UNAUTHORIZED);
-		}
-		
-		if(deleteTitlesFromUserRequestDTO.getTitles().size() == 0 ) {
-			return new UserTitlesResponseDTO(true, "No title has been deleted.", deleteTitlesFromUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.OK);
-		}
-		
-		Set<Title> currentTitles = user.getTitles();
-		
-		for(TitleDTO titleDto : deleteTitlesFromUserRequestDTO.getTitles()) {
-			
-			for(Title userTitle : user.getTitles()) {
-				if(userTitle.getTitleId() == titleDto.getTitleId()) {
-					currentTitles.remove(userTitle);
-					break;
-				}
-			}
-		}
-		
-		user.setTitles(currentTitles);
-		
-		userDao.save(user);
-		
-		Set<TitleDTO> titleDtos = convertEntity.toTitleDTOs(user.getTitles());
-		
-		return new UserTitlesResponseDTO(true, "Title(s) successfully deleted.", deleteTitlesFromUserRequestDTO.getUserId(), titleDtos, HttpStatus.OK);
-	}
+//	@Override
+//	public UserTitlesResponseDTO deleteTitlesFromUser(DeleteTitlesFromUserRequestDTO deleteTitlesFromUserRequestDTO) {
+//		
+//		User user = accessToken.getUserFromToken();
+//		
+//		if(user.getUserId() != deleteTitlesFromUserRequestDTO.getUserId()) {
+//			return new UserTitlesResponseDTO(false, "User ID does not match to the currently logged in user",deleteTitlesFromUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.UNAUTHORIZED);
+//		}
+//		
+//		if(deleteTitlesFromUserRequestDTO.getTitles().size() == 0 ) {
+//			return new UserTitlesResponseDTO(true, "No title has been deleted.", deleteTitlesFromUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.OK);
+//		}
+//		
+//		Set<Title> currentTitles = user.getTitles();
+//		
+//		for(TitleDTO titleDto : deleteTitlesFromUserRequestDTO.getTitles()) {
+//			
+//			for(Title userTitle : user.getTitles()) {
+//				if(userTitle.getTitleId() == titleDto.getTitleId()) {
+//					currentTitles.remove(userTitle);
+//					break;
+//				}
+//			}
+//		}
+//		
+//		user.setTitles(currentTitles);
+//		
+//		userDao.save(user);
+//		
+//		Set<TitleDTO> titleDtos = convertEntity.toTitleDTOs(user.getTitles());
+//		
+//		return new UserTitlesResponseDTO(true, "Title(s) successfully deleted.", deleteTitlesFromUserRequestDTO.getUserId(), titleDtos, HttpStatus.OK);
+//	}
 	
 	@Override
-	public UserTechnologiesResponseDTO addTechnologiesToUser(AddTechnologiesToUserRequestDTO addTechnologiesToUserRequestDTO) {
+	public UserTechnologiesResponseDTO addOrDeleteUserTechnologies(AddOrDeleteUserTechnologiesRequestDTO addOrDeleteUserTechnologiesRequestDTO) {
 		
 		User user = accessToken.getUserFromToken();
 
-		if(user.getUserId() != addTechnologiesToUserRequestDTO.getUserId()) {
-			return new UserTechnologiesResponseDTO(false, "User ID does not match to the currently logged in user",addTechnologiesToUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.UNAUTHORIZED);
+		if(user.getUserId() != addOrDeleteUserTechnologiesRequestDTO.getUserId()) {
+			return new UserTechnologiesResponseDTO(false, "User ID does not match to the currently logged in user",addOrDeleteUserTechnologiesRequestDTO.getUserId(), new HashSet<>(), HttpStatus.UNAUTHORIZED);
 		}
 		
-		if(addTechnologiesToUserRequestDTO.getTechnologies().isEmpty()) {
-			return new UserTechnologiesResponseDTO(true, "No technology has been added.", addTechnologiesToUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.OK);
+		if(addOrDeleteUserTechnologiesRequestDTO.getTechnologies().isEmpty()) {
+			return new UserTechnologiesResponseDTO(true, "No technology has been added.", addOrDeleteUserTechnologiesRequestDTO.getUserId(), new HashSet<>(), HttpStatus.OK);
 		}
 		
-		Set<Technology> newTechnologies = convertDTO.toTechnologyEntities(addTechnologiesToUserRequestDTO.getTechnologies());
+		Set<Technology> newTechnologies = convertDTO.toTechnologyEntities(addOrDeleteUserTechnologiesRequestDTO.getTechnologies());
 		
 		technologyDao.saveAll(newTechnologies);
 		
-		Set<Technology> userTechnologies = user.getTechnologies();
-		
-		userTechnologies.addAll(newTechnologies);
+//		Set<Technology> userTechnologies = user.getTechnologies();
+//		
+//		userTechnologies.addAll(newTechnologies);
 		
 		// Set the new technologies to user
-		user.setTechnologies(userTechnologies);
+		user.setTechnologies(newTechnologies);
 		
 		// Persists the user
 		user = userDao.save(user);
@@ -285,43 +283,43 @@ public class UserServiceImpl implements UserService{
 		
 		Set<TechnologyDTO> newTechnologyDtos = convertEntity.toTechnologyDTOs(user.getTechnologies());
 		
-		return new UserTechnologiesResponseDTO(true, "Technologies have successfully added to the user", addTechnologiesToUserRequestDTO.getUserId(), newTechnologyDtos, HttpStatus.OK);
+		return new UserTechnologiesResponseDTO(true, "User technologies have successfully updated.", addOrDeleteUserTechnologiesRequestDTO.getUserId(), newTechnologyDtos, HttpStatus.OK);
 	}
 
-	@Override
-	public UserTechnologiesResponseDTO deleteTechnologiesFromUser(DeleteTechnologiesFromUserRequestDTO deleteTechnologiesFromUserRequestDTO) {
-		
-		User user = accessToken.getUserFromToken();
-		
-		if(user.getUserId() != deleteTechnologiesFromUserRequestDTO.getUserId()) {
-			return new UserTechnologiesResponseDTO(false, "User ID does not match to the currently logged in user",deleteTechnologiesFromUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.UNAUTHORIZED);
-		}
-		
-		if(deleteTechnologiesFromUserRequestDTO.getTechnologies().isEmpty()) {
-			return new UserTechnologiesResponseDTO(true, "No technology has been deleted.", deleteTechnologiesFromUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.OK);
-		}
-		
-		Set<Technology> currentTechnologies = user.getTechnologies();
-		
-		for(TechnologyDTO technologyDto : deleteTechnologiesFromUserRequestDTO.getTechnologies()) {
-			
-			for(Technology userTechnology : user.getTechnologies()) {
-				if(userTechnology.getTechnologyId() == technologyDto.getTechnologyId()) {
-					currentTechnologies.remove(userTechnology);
-					break;
-				}
-			}
-		}
-		
-		user.setTechnologies(currentTechnologies);
-		
-		userDao.save(user);
-		
-		Set<TechnologyDTO> technologyDtos = convertEntity.toTechnologyDTOs(user.getTechnologies());
-		
-		return new UserTechnologiesResponseDTO(true, "Technologies successfully deleted.", deleteTechnologiesFromUserRequestDTO.getUserId(), technologyDtos, HttpStatus.OK);
-		
-	}
+//	@Override
+//	public UserTechnologiesResponseDTO deleteTechnologiesFromUser(DeleteTechnologiesFromUserRequestDTO deleteTechnologiesFromUserRequestDTO) {
+//		
+//		User user = accessToken.getUserFromToken();
+//		
+//		if(user.getUserId() != deleteTechnologiesFromUserRequestDTO.getUserId()) {
+//			return new UserTechnologiesResponseDTO(false, "User ID does not match to the currently logged in user",deleteTechnologiesFromUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.UNAUTHORIZED);
+//		}
+//		
+//		if(deleteTechnologiesFromUserRequestDTO.getTechnologies().isEmpty()) {
+//			return new UserTechnologiesResponseDTO(true, "No technology has been deleted.", deleteTechnologiesFromUserRequestDTO.getUserId(), new HashSet<>(), HttpStatus.OK);
+//		}
+//		
+//		Set<Technology> currentTechnologies = user.getTechnologies();
+//		
+//		for(TechnologyDTO technologyDto : deleteTechnologiesFromUserRequestDTO.getTechnologies()) {
+//			
+//			for(Technology userTechnology : user.getTechnologies()) {
+//				if(userTechnology.getTechnologyId() == technologyDto.getTechnologyId()) {
+//					currentTechnologies.remove(userTechnology);
+//					break;
+//				}
+//			}
+//		}
+//		
+//		user.setTechnologies(currentTechnologies);
+//		
+//		userDao.save(user);
+//		
+//		Set<TechnologyDTO> technologyDtos = convertEntity.toTechnologyDTOs(user.getTechnologies());
+//		
+//		return new UserTechnologiesResponseDTO(true, "Technologies successfully deleted.", deleteTechnologiesFromUserRequestDTO.getUserId(), technologyDtos, HttpStatus.OK);
+//		
+//	}
 
 
 }

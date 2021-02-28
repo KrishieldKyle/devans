@@ -491,7 +491,7 @@ export class Account extends Component {
         const {pendingRemovedTechnologies, tempTechnologiesList} = this.state;
 
         const newPendingRemoveTechnologies = pendingRemovedTechnologies;
-        const newRemoveTechnologies = tempTechnologiesList.removeTitles;
+        const newRemoveTechnologies = tempTechnologiesList.removeTechnologies;
 
         let index = newPendingRemoveTechnologies.indexOf(recycleTechnology.technologyId)
 
@@ -740,12 +740,12 @@ export class Account extends Component {
 
         if(user.profile.userId !== 0){
             profileContent = (<div id="account-profile">
-                <Link to="/edit-profile"><i className="fa fa-pencil" /></Link>
+                <Link to="/edit-profile" ><i className="fa fa-pencil account-edit" /></Link>
                 <div id="account-profile-information">
                     <p><strong>Fullname: </strong>{`${user.profile.lastName}, ${user.profile.firstName} ${user.profile.middleName}`}</p>
                     <p><strong>Email Address: </strong>{user.profile.email}</p>
                     <p><strong>Created At: </strong>{user.profile.createdAt ? <ReactMoment tz="Asia/Manila" format="lll">{user.profile.createdAt}</ReactMoment> : ""} </p>
-                    <p><strong>Last Update: </strong><ReactMoment tz="Asia/Manila" format="lll">{user.profile.updatedAt}</ReactMoment> </p>
+        <p><strong>Last Update: </strong><ReactMoment tz="Asia/Manila" format="lll">{user.profile.updatedAt ||  user.profile.createdAt}</ReactMoment> </p>
                 </div>
             
         </div>)

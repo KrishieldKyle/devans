@@ -1,6 +1,5 @@
 package com.haphor.social.model;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,11 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.haphor.social.model.util.AbstractTimestampEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,15 +27,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Reply {
+public class Reply extends AbstractTimestampEntity{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int replyId;
 	@Column(nullable = false)
 	private String content;
-	private Date createdAt;
-	private Date updatedAt;
 	
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -54,15 +50,5 @@ public class Reply {
 	
 	@OneToMany(mappedBy="reply", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Notification> notifications;
-	
-	@PrePersist
-	protected void onCreate() {
-		createdAt = new Date();
-	}
-
-	@PreUpdate
-	protected void onUpdate() {
-		updatedAt = new Date();
-	}
 
 }

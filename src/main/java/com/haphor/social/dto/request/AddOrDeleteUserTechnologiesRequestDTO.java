@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteTechnologiesFromUserRequestDTO implements Serializable {
+public class AddOrDeleteUserTechnologiesRequestDTO implements Serializable {
 	
 	/**
 	 * 

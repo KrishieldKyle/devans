@@ -115,6 +115,8 @@ export class EditProfile extends Component {
                     value={this.state.firstName}
                     error={errors.firstName}
                     onChange={this.onChange}
+                    width="90%"
+                    margin="5%"
                 />
                 <TextField 
                     placeholder="Middle Name"
@@ -123,6 +125,8 @@ export class EditProfile extends Component {
                     value={this.state.middleName}
                     error={errors.middleName}
                     onChange={this.onChange}
+                    width="90%"
+                    margin="5%"
                 />
                 <TextField 
                     placeholder="Last Name"
@@ -131,6 +135,8 @@ export class EditProfile extends Component {
                     value={this.state.lastName}
                     error={errors.lastName}
                     onChange={this.onChange}
+                    width="90%"
+                    margin="5%"
                 />
                 <TextField 
                     placeholder="Email"
@@ -139,6 +145,8 @@ export class EditProfile extends Component {
                     value={this.state.email}
                     error={errors.email}
                     onChange={this.onChange}
+                    width="90%"
+                    margin="5%"
                 />
                 {button}
             </form>

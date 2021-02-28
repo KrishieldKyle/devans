@@ -1,7 +1,5 @@
 package com.haphor.social.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,10 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.haphor.social.model.util.AbstractTimestampEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +24,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-public class UserProfile {
+public class UserProfile extends AbstractTimestampEntity{
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userProfileId;
@@ -40,24 +38,11 @@ public class UserProfile {
 	@Column(nullable = false)
 	private String lastName;
 	private String middleName;
-	private Date createdAt;
-	private Date updatedAt;
 	
 	@JsonIgnore
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userId", nullable = false)
 	private User user;
 
-	@PrePersist
-	protected void onCreate() {
-		System.out.println("onCreate");
-		createdAt = new Date();
-	}
-
-	@PreUpdate
-	protected void onUpdate() {
-		System.out.println("onUpdate");
-		updatedAt = new Date();
-	}
 
 }

@@ -1,6 +1,5 @@
 package com.haphor.social.model;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,11 +15,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.haphor.social.model.util.AbstractTimestampEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,7 +32,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-public class User {
+public class User extends AbstractTimestampEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,8 +43,6 @@ public class User {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	@Column(nullable = false, unique= true)
-	private Date createdAt;
-	private Date updatedAt;
 	
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@OneToMany(mappedBy="user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -86,16 +82,6 @@ public class User {
 		
 		System.out.println(res);
 		
-	}
-
-	@PrePersist
-	protected void onCreate() {
-		createdAt = new Date();
-	}
-
-	@PreUpdate
-	protected void onUpdate() {
-		updatedAt = new Date();
 	}
 
 }
