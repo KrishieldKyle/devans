@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.haphor.social.dao.CommentDAO;
-import com.haphor.social.dao.NotificationDAO;
 import com.haphor.social.dao.ReplyDAO;
 import com.haphor.social.dto.LikeDTO;
 import com.haphor.social.dto.ReplyDTO;
@@ -18,7 +17,6 @@ import com.haphor.social.dto.response.AllRepliesResponseDTO;
 import com.haphor.social.dto.response.DeleteReplyResponseDTO;
 import com.haphor.social.dto.response.ReplyResponseDTO;
 import com.haphor.social.model.Comment;
-import com.haphor.social.model.Notification;
 import com.haphor.social.model.Reply;
 import com.haphor.social.model.User;
 import com.haphor.social.util.constants.NotificationAction;
@@ -35,7 +33,7 @@ public class ReplyServiceImpl implements ReplyService {
 	private CommentDAO commentDao;
 	
 	@Autowired
-	private NotificationDAO notificationDao;
+	private NotificationService notificationService;
 	
 	@Autowired
 	private AccessToken accessToken;
@@ -96,17 +94,27 @@ public class ReplyServiceImpl implements ReplyService {
 			
 			Reply savedReply = replyDao.save(newReply);
 			
-			// Create a notification
-			Notification notification = new Notification();
+			// Add Notification
+			notificationService.addNotification(NotificationAction.REPLIED, newReply.getUser(), comment.getUser(), null, comment, newReply, null);
 			
-			notification.setAction(NotificationAction.REPLIED);
-			notification.setByUser(newReply.getUser());
-			notification.setForUser(comment.getUser());
-			notification.setComment(comment);
-			notification.setReply(newReply);
-			
-			// Save the notification
-			notificationDao.save(notification);
+//			int byUser = newReply.getUser().getUserId();
+//			int forUser = comment.getUser().getUserId();
+//			
+//			// make sure that the user adding the Reply is not the owner of the Comment
+//			if(byUser != forUser) {
+//			
+//				// Create a notification
+//				Notification notification = new Notification();
+//				
+//				notification.setAction(NotificationAction.REPLIED);
+//				notification.setByUser(newReply.getUser());
+//				notification.setForUser(comment.getUser());
+//				notification.setComment(comment);
+//				notification.setReply(newReply);
+//				
+//				// Save the notification
+//				notificationDao.save(notification);
+//			}
 			
 			ReplyDTO replyDto = new ReplyDTO(savedReply.getReplyId(), savedReply.getComment().getCommentId(), savedReply.getUser().getUserId(),
 					savedReply.getContent(), new HashSet<>());

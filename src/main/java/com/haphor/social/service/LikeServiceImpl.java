@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.haphor.social.dao.CommentDAO;
 import com.haphor.social.dao.LikeDAO;
-import com.haphor.social.dao.NotificationDAO;
 import com.haphor.social.dao.PostDAO;
 import com.haphor.social.dao.ReplyDAO;
 import com.haphor.social.dto.LikeDTO;
@@ -21,7 +20,6 @@ import com.haphor.social.dto.response.PostLikesResponseDTO;
 import com.haphor.social.dto.response.ReplyLikesResponseDTO;
 import com.haphor.social.model.Comment;
 import com.haphor.social.model.Like;
-import com.haphor.social.model.Notification;
 import com.haphor.social.model.Post;
 import com.haphor.social.model.Reply;
 import com.haphor.social.model.User;
@@ -45,7 +43,7 @@ public class LikeServiceImpl implements LikeService {
 	private ReplyDAO replyDao;
 	
 	@Autowired
-	private NotificationDAO notificationDao;
+	private NotificationService notificationService;
 	
 	@Autowired
 	private AccessToken access;
@@ -110,9 +108,11 @@ public class LikeServiceImpl implements LikeService {
 	public AddLikeToPostResponseDTO addLikeToPost(int postId) {
 		User user = access.getUserFromToken();
 		
-		Optional<Post> post = postDao.findById(postId);
+		Optional<Post> maybePost = postDao.findById(postId);
 		
-		if(post.isPresent()) {
+		if(maybePost.isPresent()) {
+			
+			Post post = maybePost.get();
 			
 			Optional<Like> maybeLike = likeDao.findByPostPostIdAndUserUserId(postId, user.getUserId());
 			
@@ -128,23 +128,26 @@ public class LikeServiceImpl implements LikeService {
 			
 			Like like = new Like();
 			
-			like.setPost(post.get());
+			like.setPost(post);
 			
 			like.setUser(user);
 			
 			// Add Like
 			Like newLike = likeDao.save(like);
 			
-			// Create a notification
-			Notification notification = new Notification();
-			notification.setAction(NotificationAction.POST_LIKED);
-			notification.setByUser(newLike.getUser());
-			notification.setForUser(post.get().getUser());
-			notification.setLike(newLike);
-			notification.setPost(post.get());
+			// Add Notification
+			notificationService.addNotification(NotificationAction.POST_LIKED, newLike.getUser(), post.getUser(), post, null, null, newLike);
 			
-			// Save the notification
-			notificationDao.save(notification);
+//			// Create a notification
+//			Notification notification = new Notification();
+//			notification.setAction(NotificationAction.POST_LIKED);
+//			notification.setByUser(newLike.getUser());
+//			notification.setForUser(post.getUser());
+//			notification.setLike(newLike);
+//			notification.setPost(post);
+//			
+//			// Save the notification
+//			notificationDao.save(notification);
 			
 			return new AddLikeToPostResponseDTO(newLike.getLikeId(), postId, true, "Post liked.", HttpStatus.OK);
 		}
@@ -156,9 +159,11 @@ public class LikeServiceImpl implements LikeService {
 	public AddLikeToCommentResponseDTO addLikeToComment(int commentId) {
 		User user = access.getUserFromToken();
 		
-		Optional<Comment> comment = commentDao.findById(commentId);
+		Optional<Comment> maybeComment = commentDao.findById(commentId);
 		
-		if(comment.isPresent()) {
+		if(maybeComment.isPresent()) {
+			
+			Comment comment = maybeComment.get();
 			
 			Optional<Like> maybeLike = likeDao.findByCommentCommentIdAndUserUserId(commentId, user.getUserId());
 			
@@ -173,22 +178,25 @@ public class LikeServiceImpl implements LikeService {
 			
 			Like like = new Like();
 			
-			like.setComment(comment.get());
+			like.setComment(comment);
 			
 			like.setUser(user);
 			
 			Like newLike = likeDao.save(like);
 			
-			// Create a notification
-			Notification notification = new Notification();
-			notification.setAction(NotificationAction.COMMENT_LIKED);
-			notification.setByUser(newLike.getUser());
-			notification.setForUser(comment.get().getUser());
-			notification.setLike(newLike);
-			notification.setComment(comment.get());
+			// Add Notification
+			notificationService.addNotification(NotificationAction.COMMENT_LIKED, newLike.getUser(), comment.getUser(), null, comment, null, newLike);
 			
-			// Save the notification
-			notificationDao.save(notification);
+//			// Create a notification
+//			Notification notification = new Notification();
+//			notification.setAction(NotificationAction.COMMENT_LIKED);
+//			notification.setByUser(newLike.getUser());
+//			notification.setForUser(comment.getUser());
+//			notification.setLike(newLike);
+//			notification.setComment(comment);
+//			
+//			// Save the notification
+//			notificationDao.save(notification);
 			
 			return new AddLikeToCommentResponseDTO(newLike.getLikeId(), commentId, true, "Comment liked.", HttpStatus.OK);
 		}
@@ -199,9 +207,11 @@ public class LikeServiceImpl implements LikeService {
 	public AddLikeToReplyResponseDTO addLikeToReply(int replyId) {
 		User user = access.getUserFromToken();
 		
-		Optional<Reply> reply = replyDao.findById(replyId);
+		Optional<Reply> maybeReply = replyDao.findById(replyId);
 		
-		if(reply.isPresent()) {
+		if(maybeReply.isPresent()) {
+			
+			Reply reply = maybeReply.get();
 			
 			Optional<Like> maybeLike = likeDao.findByReplyReplyIdAndUserUserId(replyId, user.getUserId());
 			
@@ -216,22 +226,25 @@ public class LikeServiceImpl implements LikeService {
 			
 			Like like = new Like();
 			
-			like.setReply(reply.get());
+			like.setReply(reply);
 			
 			like.setUser(user);
 			
 			Like newLike = likeDao.save(like);
 			
-			// Create a notification
-			Notification notification = new Notification();
-			notification.setAction(NotificationAction.REPLY_LIKED);
-			notification.setByUser(newLike.getUser());
-			notification.setForUser(reply.get().getUser());
-			notification.setLike(newLike);
-			notification.setReply(reply.get());
+			// Add Notification
+			notificationService.addNotification(NotificationAction.REPLY_LIKED, newLike.getUser(), reply.getUser(), null, null, reply, newLike);
 			
-			// Save the notification
-			notificationDao.save(notification);
+//			// Create a notification
+//			Notification notification = new Notification();
+//			notification.setAction(NotificationAction.REPLY_LIKED);
+//			notification.setByUser(newLike.getUser());
+//			notification.setForUser(reply.getUser());
+//			notification.setLike(newLike);
+//			notification.setReply(reply);
+//			
+//			// Save the notification
+//			notificationDao.save(notification);
 			
 			return new AddLikeToReplyResponseDTO(newLike.getLikeId(), replyId, true, "Reply liked.", HttpStatus.OK);
 		}

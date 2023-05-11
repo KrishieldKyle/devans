@@ -15,7 +15,12 @@ import com.haphor.social.dto.notification.PostLikeNotificationDTO;
 import com.haphor.social.dto.notification.ReplyLikeNotificationDTO;
 import com.haphor.social.dto.notification.ReplyNotificationDTO;
 import com.haphor.social.dto.response.AllNotificationsResponseDTO;
+import com.haphor.social.model.Comment;
+import com.haphor.social.model.Like;
 import com.haphor.social.model.Notification;
+import com.haphor.social.model.Post;
+import com.haphor.social.model.Reply;
+import com.haphor.social.model.User;
 import com.haphor.social.util.constants.NotificationAction;
 
 @Service
@@ -77,6 +82,33 @@ public class NotificationServiceImpl implements NotificationService {
 		}
 		
 		return new AllNotificationsResponseDTO(userId,notificationDtos, true, "Notifications successfully fetched", HttpStatus.OK);
+	}
+	
+	@Override
+	public void addNotification(NotificationAction action, User byUser, User forUser, Post post, Comment comment,
+			Reply reply, Like like) {
+		
+		int byUserId = byUser.getUserId();
+		int forUserId = forUser.getUserId();
+		
+		// make sure that the user adding the Reply is not the owner of the Comment
+		if(byUserId != forUserId) {
+		
+			// Create a notification
+			Notification notification = new Notification();
+			
+			notification.setAction(action);
+			notification.setByUser(byUser);
+			notification.setForUser(forUser);
+			notification.setPost(post);
+			notification.setComment(comment);
+			notification.setReply(reply);
+			notification.setLike(like);
+			
+			// Save the notification
+			notificationDao.save(notification);
+		}
+		
 	}
 
 }

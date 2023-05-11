@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.haphor.social.dao.CommentDAO;
-import com.haphor.social.dao.NotificationDAO;
 import com.haphor.social.dao.PostDAO;
 import com.haphor.social.dto.CommentDTO;
 import com.haphor.social.dto.LikeDTO;
@@ -18,7 +17,6 @@ import com.haphor.social.dto.response.AllCommentsResponseDTO;
 import com.haphor.social.dto.response.CommentResponseDTO;
 import com.haphor.social.dto.response.DeleteCommentResponseDTO;
 import com.haphor.social.model.Comment;
-import com.haphor.social.model.Notification;
 import com.haphor.social.model.Post;
 import com.haphor.social.model.User;
 import com.haphor.social.util.constants.NotificationAction;
@@ -38,7 +36,7 @@ public class CommentServiceImpl implements CommentService {
 	private CommentDAO commentDao;
 	
 	@Autowired
-	private NotificationDAO notificationDao;
+	private NotificationService notificationService;
 	
 	@Autowired
 	private ConvertEntity convertEntity;
@@ -103,18 +101,27 @@ public class CommentServiceImpl implements CommentService {
 			CommentDTO commentDto = new CommentDTO(savedComment.getPost().getPostId(), addOrUpdateCommentRequestDTO.getUserId(),
 					savedComment.getCommentId(), savedComment.getContent(), new HashSet<>(), savedComment.getCreatedAt(), savedComment.getUpdatedAt());
 			
-			// Create notification
-			Notification notification = new Notification();
+			// Add Notification
+			notificationService.addNotification(NotificationAction.COMMENTED, newComment.getUser(), post.getUser(), post, newComment, null, null);
 			
-			notification.setAction(NotificationAction.COMMENTED);
-			notification.setByUser(newComment.getUser());
-			notification.setForUser(post.getUser());
-			notification.setComment(newComment);
-			notification.setPost(post);
-			
-			// Save the notification
-			notificationDao.save(notification);
-			
+//			int byUser = newComment.getUser().getUserId();
+//			int forUser = post.getUser().getUserId();
+//			
+//			// make sure that the user adding the Comment is not the owner of the Post
+//			if(byUser != forUser) {
+//				
+//				// Create notification
+//				Notification notification = new Notification();
+//				
+//				notification.setAction(NotificationAction.COMMENTED);
+//				notification.setByUser(newComment.getUser());
+//				notification.setForUser(post.getUser());
+//				notification.setComment(newComment);
+//				notification.setPost(post);
+//				
+//				// Save the notification
+//				notificationDao.save(notification);
+//			}
 			
 			return new CommentResponseDTO(commentDto, true, "Comment successfully saved", HttpStatus.OK);
 		}

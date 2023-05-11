@@ -39,7 +39,7 @@ public class ReplyController {
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<?> saveOrUpdateCOmment(@RequestBody AddOrUpdateReplyRequestDTO addOrUpdateReplyRequestDTO) {
+	public ResponseEntity<?> saveOrUpdateReply(@RequestBody AddOrUpdateReplyRequestDTO addOrUpdateReplyRequestDTO) {
 		
 		Map<String, Object> message = inputValidatorService.validateReplyInput(addOrUpdateReplyRequestDTO);
 		
@@ -56,7 +56,7 @@ public class ReplyController {
 	}
 	
 	@DeleteMapping("/{replyId}")
-	public ResponseEntity<?> saveOrUpdateCOmment(@PathVariable int replyId) {
+	public ResponseEntity<?> deleteReply(@PathVariable int replyId) {
 		
 		DeleteReplyResponseDTO response = replyService.deleteReply(replyId);
 		
