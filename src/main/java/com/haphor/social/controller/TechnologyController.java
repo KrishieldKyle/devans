@@ -19,7 +19,7 @@ public class TechnologyController {
 	private TechnologyService technologyService;
 
 	@GetMapping("/")
-	public ResponseEntity<?> registerUser() {
+	public ResponseEntity<?> getAllTechnologies() {
 		
 		AllTechnologiesResponseDTO response = technologyService.getTechnologies();
 
@@ -28,7 +28,7 @@ public class TechnologyController {
 	}
 	
 	@GetMapping("/{technologyId}")
-	public ResponseEntity<?> registerUser(@PathVariable int technologyId) {
+	public ResponseEntity<?> getTechnologyById(@PathVariable int technologyId) {
 
 		TechnologyResponseDTO response = technologyService.getTechnology(technologyId);
 		

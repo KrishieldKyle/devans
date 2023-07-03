@@ -31,15 +31,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		return new BCryptPasswordEncoder();
 	}
 	
-	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
-		System.out.println("DaoAuthenticationProvider: Line 35");
-		DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-		auth.setUserDetailsService(userDetailsService);
-		auth.setPasswordEncoder(bCryptPasswordEncoder());
-		return auth;
-	}
-	
 	@Override
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -50,6 +41,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		System.out.println("configure: Line 50");
 		auth.authenticationProvider(authenticationProvider());
+	}
+	
+	@Bean
+	public DaoAuthenticationProvider authenticationProvider() {
+		System.out.println("DaoAuthenticationProvider: Line 35");
+		DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+		auth.setUserDetailsService(userDetailsService);
+		auth.setPasswordEncoder(bCryptPasswordEncoder());
+		return auth;
 	}
 	
 	@Override
