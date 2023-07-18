@@ -127,18 +127,23 @@ public class UserServiceImpl implements UserService{
 		
 		UserProfileDTO userProfileDTO = null;
 		
+		Set<TitleDTO> titleDtos = null;
+		Set<TechnologyDTO> technologyDtos = null;
+		
 		for(User user : users) {
 			
 			userProfile = user.getUserProfile();
+			
+			userProfileDTO = null;
 			
 			if(userProfile != null) {
 				userProfileDTO = convertEntity.toUserProfileDTO(userProfile);
 				
 			}
 			
-			Set<TitleDTO> titleDtos = convertEntity.toTitleDTOs(user.getTitles());
+			titleDtos = convertEntity.toTitleDTOs(user.getTitles());
 			
-			Set<TechnologyDTO> technologyDtos = convertEntity.toTechnologyDTOs(user.getTechnologies());
+			technologyDtos = convertEntity.toTechnologyDTOs(user.getTechnologies());
 			
 			userDto = convertEntity.toUserDTO(user, titleDtos, technologyDtos, userProfileDTO);
 			
